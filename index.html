@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mySecurity — AI security operations for homes and businesses</title>
+<meta name="description" content="mySecurity turns the CCTV, gates, doors and sensors you already own into one AI security system. Continuous monitoring, verified alerts and automatic response for residential and commercial sites.">
+<link rel="canonical" href="https://mysecurity.example.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="mySecurity — AI security operations for homes and businesses">
+<meta property="og:description" content="One AI watching every camera, gate and door. Continuous monitoring, verified alerts and automatic response.">
+<meta property="og:image" content="assets/img/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script src="assets/js/theme-init.js"></script>
+<script type="module" src="assets/js/main.js"></script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ====================================================================
+     Header
+     ==================================================================== -->
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+      <span class="brand__word"><em>my</em>Security</span>
+    </a>
+
+    <nav class="site-header__nav" aria-label="Primary" data-nav-links>
+      <a class="nav-link" href="platform.html">Platform</a>
+      <a class="nav-link" href="residential.html">Residential</a>
+      <a class="nav-link" href="commercial.html">Commercial</a>
+      <a class="nav-link" href="pricing.html">Pricing</a>
+      <a class="nav-link" href="about.html">Company</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" aria-hidden="true"><use href="assets/img/icons.svg#icon-sun"></use></svg>
+        <svg class="icon-moon" aria-hidden="true"><use href="assets/img/icons.svg#icon-moon"></use></svg>
+      </button>
+      <a class="btn btn--ghost" href="contact.html">Talk to sales</a>
+      <a class="btn btn--primary" href="contact.html#demo">Book a demo</a>
+      <button class="icon-btn menu-btn" type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-menu"></use></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" data-menu>
+  <nav aria-label="Mobile">
+    <ul>
+      <li><a href="platform.html">Platform</a></li>
+      <li><a href="residential.html">Residential</a></li>
+      <li><a href="commercial.html">Commercial</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">Company</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__actions">
+    <a class="btn btn--primary btn--lg btn--block" href="contact.html#demo">Book a demo</a>
+    <a class="btn btn--secondary btn--lg btn--block" href="contact.html">Talk to sales</a>
+  </div>
+</div>
+
+<main id="main">
+<div class="frame">
+
+  <!-- ==================================================================
+       Hero
+       ================================================================== -->
+  <section class="hero section--dotted section--seam">
+    <div class="wrap">
+      <div class="hero__inner">
+        <span class="badge badge--accent">
+          <span class="badge__dot badge__dot--live"></span>
+          Now monitoring 1,200+ sites
+        </span>
+
+        <h1 class="hero__title">One AI watching every camera, gate and door.</h1>
+
+        <p class="hero__lead">
+          mySecurity turns the equipment you already own into a single security
+          system that thinks. It sees what matters, decides what to do, and acts
+          in seconds — across homes, campuses, warehouses and offices.
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="contact.html#demo">
+            Book a demo
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+          <a class="btn btn--secondary btn--lg" href="platform.html">See how it works</a>
+        </div>
+
+        <p class="hero__note">Works with existing CCTV · No rip-and-replace · Live in days</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       Console
+       ================================================================== -->
+  <section class="section section--seam pt-0">
+    <div class="wrap">
+      <div class="console" data-reveal>
+        <div class="console__bar">
+          <div class="console__dots"><span></span><span></span><span></span></div>
+          <span class="console__title">mySecurity · Riverside Campus</span>
+          <span class="badge badge--accent ml-auto">
+            <span class="badge__dot badge__dot--live"></span> Live
+          </span>
+        </div>
+
+        <div class="console__body">
+          <div class="console__stage">
+            <!-- Site plan: a schematic of a monitored property -->
+            <svg class="siteplan" viewBox="0 0 320 210" role="img"
+                 aria-label="Schematic site plan showing camera coverage, gates and sensor nodes across a monitored property">
+              <!-- Ground / boundary -->
+              <rect class="sp-ground" x="10" y="10" width="300" height="190" rx="6"/>
+              <path class="sp-ground" d="M10 150h300"/>
+
+              <!-- Buildings -->
+              <path class="sp-structure" d="M46 62h84v58H46z"/>
+              <path class="sp-structure" d="M46 62v-14h50v14"/>
+              <path class="sp-structure" d="M186 46h96v74h-96z"/>
+              <path class="sp-structure" d="M186 78h96"/>
+              <path class="sp-structure" d="M218 46v32M250 46v32M218 78v42M250 78v42"/>
+
+              <!-- Driveway -->
+              <path class="sp-ground" d="M160 200v-50h60"/>
+
+              <!-- Camera cones -->
+              <path class="sp-cone" d="M40 56 4 92l30 30z"/>
+              <path class="sp-cone" d="M288 40l30 34-30 30z"/>
+              <path class="sp-cone" d="M160 196l-42-30h84z"/>
+
+              <!-- Perimeter beam -->
+              <path class="sp-beam" d="M10 172h300"/>
+
+              <!-- Nodes -->
+              <g>
+                <circle class="sp-ping" cx="40" cy="56" r="14"/>
+                <circle class="sp-node" cx="40" cy="56" r="4.5"/>
+                <circle class="sp-node-core" cx="40" cy="56" r="1.8"/>
+              </g>
+              <g>
+                <circle class="sp-ping sp-ping--b" cx="288" cy="40" r="14"/>
+                <circle class="sp-node" cx="288" cy="40" r="4.5"/>
+                <circle class="sp-node-core" cx="288" cy="40" r="1.8"/>
+              </g>
+              <g>
+                <circle class="sp-ping sp-ping--c" cx="160" cy="196" r="14"/>
+                <circle class="sp-node" cx="160" cy="196" r="4.5"/>
+                <circle class="sp-node-core" cx="160" cy="196" r="1.8"/>
+              </g>
+              <circle class="sp-node" cx="88" cy="120" r="3.5"/>
+              <circle class="sp-node" cx="234" cy="120" r="3.5"/>
+
+              <!-- Gate -->
+              <path class="sp-structure" d="M138 150h44"/>
+              <path class="sp-beam" d="M140 150l38-12"/>
+
+              <!-- Labels -->
+              <text class="sp-label" x="18" y="30">Perimeter</text>
+              <text class="sp-label" x="190" y="136">Warehouse</text>
+              <text class="sp-label" x="50" y="136">Office</text>
+              <text class="sp-label" x="188" y="166">Main gate</text>
+            </svg>
+          </div>
+
+          <div class="console__side">
+            <span class="eyebrow eyebrow--bare">Event stream</span>
+            <ul class="feed" data-feed aria-live="polite" aria-label="Recent security events"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       Stats
+       ================================================================== -->
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="stats" data-reveal-group>
+        <div class="stat">
+          <span class="stat__value"><span data-count="92" data-count-suffix="%">92%</span></span>
+          <span class="stat__label">Fewer false alarms than motion-only CCTV alerting</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value"><span data-count="1.8" data-count-suffix="s">1.8s</span></span>
+          <span class="stat__label">Median time from detection to a verified, routed alert</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value"><span data-count="40" data-count-suffix="+">40+</span></span>
+          <span class="stat__label">Camera, gate, reader and sensor families supported</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value">24<span class="accent">/7</span></span>
+          <span class="stat__label">Unattended cover, with human escalation when it counts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       Capabilities
+       ================================================================== -->
+  <section class="section" id="capabilities">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">One system</span>
+        <h2>Everything on site, under one intelligence.</h2>
+        <p>
+          Most properties run five disconnected systems and a WhatsApp group.
+          mySecurity puts cameras, access control, visitors, assets and
+          emergencies behind a single brain — and a single screen.
+        </p>
+      </div>
+
+      <div class="card-grid" data-reveal-group>
+        <article class="card card--feature">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-camera"></use></svg></span>
+          <h3>Video intelligence</h3>
+          <p>
+            Every camera gets a description, not just a motion box. People,
+            vehicles, packages, loitering, tailgating, crowding, fallen persons,
+            open doors — recognised in context and searchable in plain English.
+          </p>
+        </article>
+
+        <article class="card card--feature">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-gate"></use></svg></span>
+          <h3>Gates &amp; access control</h3>
+          <p>
+            Boom barriers, sliding gates, turnstiles and door controllers driven
+            by policy rather than a guard's judgement. Number-plate recognition,
+            resident lists, delivery windows and one-tap remote open.
+          </p>
+        </article>
+
+        <article class="card card--feature">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-badge"></use></svg></span>
+          <h3>Visitors &amp; guests</h3>
+          <p>
+            Pre-authorised passes, QR check-in, ID capture and automatic host
+            notification. Every entry and exit is logged with a face, a time and
+            a reason — and expiring passes close themselves.
+          </p>
+        </article>
+
+        <article class="card card--feature">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-asset"></use></svg></span>
+          <h3>Asset &amp; environment monitoring</h3>
+          <p>
+            Watch the things that quietly cost you money: cold-chain
+            temperature, generator fuel, pump rooms, high-value stock, server
+            racks. Thresholds, drift detection and an alert before it's a loss.
+          </p>
+        </article>
+
+        <article class="card card--feature">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-alert"></use></svg></span>
+          <h3>Emergency management</h3>
+          <p>
+            Fire, smoke, gas, medical and intrusion events trigger a rehearsed
+            playbook: unlock egress, sound the right zone, call the right people
+            in the right order, and hold an evidence-grade timeline.
+          </p>
+        </article>
+
+        <article class="card card--feature">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-radar"></use></svg></span>
+          <h3>Perimeter &amp; intrusion</h3>
+          <p>
+            Virtual tripwires, fence-line analytics, loitering zones and
+            after-hours rules. The system learns what your normal looks like, so
+            a cat on the wall doesn't wake the whole street.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       How it works
+       ================================================================== -->
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <span class="eyebrow">How it works</span>
+          <h2>Connect. Understand. Decide. Act.</h2>
+        </div>
+        <a class="link-arrow" href="platform.html">
+          Read the platform detail
+          <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+        </a>
+      </div>
+
+      <div class="steps" data-reveal-group data-reveal-step="80">
+        <article class="step">
+          <span class="step-index">Step 01</span>
+          <h3>Connect</h3>
+          <p>
+            An on-site edge appliance discovers your existing cameras over
+            ONVIF/RTSP and speaks to your gate, reader and alarm hardware.
+            Nothing gets ripped out.
+          </p>
+        </article>
+
+        <article class="step">
+          <span class="step-index">Step 02</span>
+          <h3>Understand</h3>
+          <p>
+            Vision and sensor models build a continuous description of the site:
+            who is here, what moved, what is open, what is out of range — and
+            what counts as normal for this place.
+          </p>
+        </article>
+
+        <article class="step">
+          <span class="step-index">Step 03</span>
+          <h3>Decide</h3>
+          <p>
+            Your rules and escalation ladder run against that understanding.
+            Routine things are handled silently. Anything ambiguous is verified
+            before a human is disturbed.
+          </p>
+        </article>
+
+        <article class="step">
+          <span class="step-index">Step 04</span>
+          <h3>Act</h3>
+          <p>
+            Open the gate, lock the door, sound a zone, call the guard, notify
+            the owner, dispatch a responder — and record every step as a
+            time-stamped, exportable trail.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       Residential / Commercial split
+       ================================================================== -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <span class="eyebrow">Built for both</span>
+        <h2>The same brain, tuned to your property.</h2>
+        <p>
+          A four-camera home and a twelve-building industrial estate need very
+          different defaults. Both get the same engine.
+        </p>
+      </div>
+
+      <div class="grid grid--2 grid--wide" data-reveal-group>
+        <article class="panel">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-home"></use></svg></span>
+          <h3>Residential</h3>
+          <p class="text-muted">
+            Villas, apartments and gated communities. Quiet by default, awake
+            when it matters, and simple enough that everyone in the house
+            actually uses it.
+          </p>
+          <ul class="ticks panel__list">
+            <li>Family, staff and regular-visitor recognition</li>
+            <li>Automatic gate entry for known vehicles and expected deliveries</li>
+            <li>Guest passes you can send from your phone</li>
+            <li>Child, elderly and pet safety zones around pools and driveways</li>
+            <li>Society-wide dashboards for RWAs and facility managers</li>
+          </ul>
+          <a class="link-arrow" href="residential.html">
+            Explore residential
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+        </article>
+
+        <article class="panel">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-building"></use></svg></span>
+          <h3>Commercial</h3>
+          <p class="text-muted">
+            Offices, retail, warehouses, factories and multi-site portfolios.
+            Built for shift patterns, contractors, audits and the reality of
+            hundreds of cameras.
+          </p>
+          <ul class="ticks panel__list">
+            <li>Contractor and vendor check-in with document and induction checks</li>
+            <li>Dock, yard and loading-bay orchestration with ANPR</li>
+            <li>Restricted-zone, PPE and safety-compliance monitoring</li>
+            <li>Asset, cold-chain and utility-room supervision</li>
+            <li>Portfolio view across every site, with per-site permissions</li>
+          </ul>
+          <a class="link-arrow" href="commercial.html">
+            Explore commercial
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       Integrations
+       ================================================================== -->
+  <section class="section section--surface" id="integrations">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <span class="eyebrow">Integrations</span>
+        <h2>Works with what you already bought.</h2>
+        <p>
+          mySecurity is deliberately hardware-agnostic. If it speaks a standard
+          protocol — or has a relay and an IP address — we can drive it.
+        </p>
+      </div>
+    </div>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-camera"></use></svg> ONVIF Profile S/T</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-camera"></use></svg> RTSP / H.264 / H.265</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-gate"></use></svg> Boom barriers</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-gate"></use></svg> Sliding &amp; swing gates</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-badge"></use></svg> RFID / UHF readers</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-door"></use></svg> Wiegand / OSDP</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-bell"></use></svg> SIA / Contact ID panels</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-thermo"></use></svg> Modbus / BACnet sensors</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-network"></use></svg> MQTT device bus</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-phone"></use></svg> SIP intercoms</span>
+        <!-- Duplicated once so the loop is seamless -->
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-camera"></use></svg> ONVIF Profile S/T</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-camera"></use></svg> RTSP / H.264 / H.265</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-gate"></use></svg> Boom barriers</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-gate"></use></svg> Sliding &amp; swing gates</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-badge"></use></svg> RFID / UHF readers</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-door"></use></svg> Wiegand / OSDP</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-bell"></use></svg> SIA / Contact ID panels</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-thermo"></use></svg> Modbus / BACnet sensors</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-network"></use></svg> MQTT device bus</span>
+        <span class="marquee__item"><svg><use href="assets/img/icons.svg#icon-phone"></use></svg> SIP intercoms</span>
+      </div>
+    </div>
+
+    <div class="wrap mt-12">
+      <div class="chip-cloud justify-center">
+        <span class="chip">Hikvision</span>
+        <span class="chip">Dahua</span>
+        <span class="chip">CP Plus</span>
+        <span class="chip">Axis</span>
+        <span class="chip">Uniview</span>
+        <span class="chip">Hanwha</span>
+        <span class="chip">Reolink</span>
+        <span class="chip">Generic ONVIF</span>
+        <span class="chip">Legacy analogue via DVR</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       Trust
+       ================================================================== -->
+  <section class="section" id="trust">
+    <div class="wrap">
+      <div class="split">
+        <div class="stack-6" data-reveal>
+          <span class="eyebrow">Privacy &amp; control</span>
+          <h2>Your footage stays yours.</h2>
+          <p class="text-muted text-lead">
+            A security system that leaks is not a security system. Recognition
+            runs on the edge appliance inside your building; only events,
+            not continuous video, ever need to leave the site.
+          </p>
+          <ul class="ticks">
+            <li><strong class="text-display">Edge-first processing.</strong> Video is analysed locally. Cloud is for coordination, not surveillance.</li>
+            <li><strong class="text-display">Encrypted end to end.</strong> TLS in transit, AES-256 at rest, per-site key isolation.</li>
+            <li><strong class="text-display">Role-based access.</strong> Guards, managers, owners and auditors each see only their slice.</li>
+            <li><strong class="text-display">Full audit trail.</strong> Every view, export, override and door-open is attributed and immutable.</li>
+            <li><strong class="text-display">Data residency you choose.</strong> Keep records in-country, or entirely on-premise.</li>
+          </ul>
+        </div>
+
+        <div class="grid grid--2" data-reveal-group>
+          <div class="card">
+            <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-network"></use></svg></span>
+            <h4>Runs offline</h4>
+            <p>Loses internet? Detection, access decisions and local sirens keep working. Events sync when the link returns.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-lock"></use></svg></span>
+            <h4>Least privilege</h4>
+            <p>Time-bound access, approval workflows for exports, and automatic revocation when someone leaves.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-eye"></use></svg></span>
+            <h4>Privacy zones</h4>
+            <p>Mask neighbours' windows, changing rooms and pavements. Redaction is enforced before the frame is stored.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-chart"></use></svg></span>
+            <h4>Explainable alerts</h4>
+            <p>Every alert carries the clip, the reasoning and the confidence — so you can challenge it, not just trust it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       Quote
+       ================================================================== -->
+  <section class="section section--tight">
+    <div class="wrap wrap--narrow">
+      <figure class="quote" data-reveal>
+        <span class="eyebrow">Customer</span>
+        <blockquote>
+          “We went from four guards staring at a wall of monitors to one
+          supervisor handling exceptions. The night shift finally sees the
+          things it was always supposed to catch.”
+        </blockquote>
+        <figcaption>
+          <strong>Facilities lead</strong> — 9-building logistics park, 260 cameras
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       FAQ
+       ================================================================== -->
+  <section class="section" id="faq">
+    <div class="wrap wrap--narrow">
+      <div class="section-head">
+        <span class="eyebrow">Questions</span>
+        <h2>The things people ask first.</h2>
+      </div>
+
+      <div class="accordion" data-accordion="exclusive">
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger
+                    aria-expanded="true" aria-controls="faq-1" id="faq-1-t">
+              Do we have to replace our existing cameras?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="faq-1" role="region" aria-labelledby="faq-1-t">
+            <div>
+              No. The edge appliance pulls streams from any ONVIF or RTSP camera,
+              including analogue cameras behind an existing DVR. We only recommend
+              a replacement when a camera's placement or resolution genuinely can't
+              support the detection you need — and we'll tell you which ones those
+              are during the site survey.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger
+                    aria-expanded="false" aria-controls="faq-2" id="faq-2-t">
+              How long does deployment take?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="faq-2" role="region" aria-labelledby="faq-2-t">
+            <div>
+              A single-property residential site is typically live the same day.
+              A commercial site with gates, readers and alarm-panel integration
+              usually runs one to three weeks: a survey, an appliance install, a
+              week of learning your normal, then rule tuning with your team.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger
+                    aria-expanded="false" aria-controls="faq-3" id="faq-3-t">
+              What happens when the internet goes down?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="faq-3" role="region" aria-labelledby="faq-3-t">
+            <div>
+              Everything that matters keeps running. Detection, access decisions,
+              local alarms and on-site notification are all handled by the edge
+              appliance. Remote notifications queue and deliver as soon as
+              connectivity returns, and an optional LTE fallback covers the gap.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger
+                    aria-expanded="false" aria-controls="faq-4" id="faq-4-t">
+              Does it replace our guards?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="faq-4" role="region" aria-labelledby="faq-4-t">
+            <div>
+              It replaces the part of the job humans are worst at — watching a
+              quiet screen for eight hours. Guards move from passive monitoring to
+              responding to verified, pre-triaged events. Most customers keep the
+              same team and cover far more ground with it.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger
+                    aria-expanded="false" aria-controls="faq-5" id="faq-5-t">
+              Who can see our video?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="faq-5" role="region" aria-labelledby="faq-5-t">
+            <div>
+              Only the people you name, under the roles you assign. mySecurity
+              staff have no standing access to customer footage; support access is
+              time-boxed, requires your approval, and is written to the same audit
+              log you can read.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       CTA
+       ================================================================== -->
+  <section class="section">
+    <div class="wrap">
+      <div class="cta" data-reveal>
+        <span class="eyebrow">Get started</span>
+        <h2>See your own site running on mySecurity.</h2>
+        <p>
+          Send us a floor plan or a camera list and we'll come back with a
+          coverage map, a device compatibility report and a realistic timeline.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="contact.html#demo">
+            Book a demo
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+          <a class="btn btn--secondary btn--lg" href="pricing.html">See pricing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ====================================================================
+     Footer
+     ==================================================================== -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+          <span class="brand__word"><em>my</em>Security</span>
+        </a>
+        <p>
+          AI security operations for residential and commercial property.
+          One system for cameras, gates, visitors, assets and emergencies.
+        </p>
+        <div class="row mt-5">
+          <a class="icon-btn" href="#" aria-label="mySecurity on LinkedIn">
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-linkedin"></use></svg>
+          </a>
+          <a class="icon-btn" href="#" aria-label="mySecurity on X">
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-x"></use></svg>
+          </a>
+          <a class="icon-btn" href="#" aria-label="mySecurity on YouTube">
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-youtube"></use></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="platform.html">Platform</a></li>
+          <li><a href="platform.html#video">Video intelligence</a></li>
+          <li><a href="platform.html#access">Access &amp; gates</a></li>
+          <li><a href="platform.html#visitors">Visitor management</a></li>
+          <li><a href="platform.html#emergency">Emergency response</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Solutions</h3>
+        <ul>
+          <li><a href="residential.html">Homes &amp; villas</a></li>
+          <li><a href="residential.html#communities">Gated communities</a></li>
+          <li><a href="commercial.html">Offices &amp; retail</a></li>
+          <li><a href="commercial.html#industrial">Warehousing</a></li>
+          <li><a href="commercial.html#portfolio">Multi-site portfolios</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html#demo">Book a demo</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:hello@mysecurity.ai">hello@mysecurity.ai</a></li>
+          <li><a href="tel:+918000000000">+91 80 0000 0000</a></li>
+          <li><span class="text-muted text-sm">Bengaluru · Dubai</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__base">
+      <span>© <span data-year>2026</span> mySecurity Technologies. All rights reserved.</span>
+      <div class="site-footer__legal">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html#security">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

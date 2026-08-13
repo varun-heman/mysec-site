@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Netlify
+.netlify/
+
+# Logs
+*.log

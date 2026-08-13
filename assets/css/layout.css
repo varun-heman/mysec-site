@@ -1,0 +1,355 @@
+/* ==========================================================================
+   mySecurity — Layout
+   Page shell, the dashed measuring frame, sections, grids, header, footer.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. The frame
+   The reference design hangs everything off a pair of dashed vertical rails
+   with small square markers where section rules meet them. `.frame` draws
+   the rails; `.section` draws the rule and its two markers.
+   -------------------------------------------------------------------------- */
+
+.frame {
+  position: relative;
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+@media (min-width: 900px) {
+  .frame {
+    border-inline: 1px dashed var(--grid-line);
+  }
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.wrap--narrow { max-width: 880px; }
+.wrap--prose  { max-width: 720px; }
+
+/* --------------------------------------------------------------------------
+   2. Sections
+   -------------------------------------------------------------------------- */
+
+.section {
+  position: relative;
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.section--flush   { padding-block: 0; }
+.section--tight   { padding-block: clamp(2.5rem, 1.8rem + 3vw, 4.5rem); }
+.section--seam    { border-top: none; }
+.section--surface { background-color: var(--surface); }
+
+/* Corner markers sitting on the rails. */
+@media (min-width: 900px) {
+  .section:not(.section--seam)::before,
+  .section:not(.section--seam)::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    width: 7px;
+    height: 7px;
+    background-color: var(--bg);
+    border: 1px solid var(--marker);
+    pointer-events: none;
+  }
+
+  .section:not(.section--seam)::before { left: -4px; }
+  .section:not(.section--seam)::after  { right: -4px; }
+
+  .section--surface::before,
+  .section--surface::after {
+    background-color: var(--surface);
+  }
+}
+
+/* Dotted texture, used sparingly behind the hero and CTA bands. */
+.section--dotted {
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: -1px -1px;
+}
+
+.section--dotted::after,
+.section--dotted::before {
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   3. Section headers
+   -------------------------------------------------------------------------- */
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  max-width: 760px;
+  margin-bottom: var(--sp-12);
+}
+
+.section-head--center {
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.section-head--wide { max-width: 920px; }
+
+.section-head p {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: var(--measure);
+}
+
+.section-head--split {
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-10);
+  max-width: none;
+}
+
+@media (max-width: 780px) {
+  .section-head--split {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Grids
+   -------------------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  gap: var(--sp-5);
+}
+
+.grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.grid--gapless { gap: 0; }
+.grid--wide    { gap: var(--sp-8); }
+
+@media (max-width: 1000px) {
+  .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 680px) {
+  .grid--2,
+  .grid--3,
+  .grid--4 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Asymmetric editorial split used by feature rows. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: clamp(2rem, 1rem + 4vw, 5rem);
+  align-items: center;
+}
+
+.split--reverse > :first-child { order: 2; }
+
+@media (max-width: 880px) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .split--reverse > :first-child { order: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   5. Stacks & inline rows
+   -------------------------------------------------------------------------- */
+
+.stack   { display: flex; flex-direction: column; gap: var(--sp-4); }
+.stack-2 { display: flex; flex-direction: column; gap: var(--sp-2); }
+.stack-6 { display: flex; flex-direction: column; gap: var(--sp-6); }
+.stack-8 { display: flex; flex-direction: column; gap: var(--sp-8); }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.row--center { justify-content: center; }
+
+/* --------------------------------------------------------------------------
+   6. Header
+   -------------------------------------------------------------------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background-color: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur) var(--ease),
+              background-color var(--dur) var(--ease);
+}
+
+.site-header.is-stuck {
+  border-bottom-color: var(--border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  height: var(--header-h);
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-inline: auto;
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+@media (max-width: 980px) {
+  .site-header__nav { display: none; }
+  .site-header__actions .btn--ghost { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   7. Footer
+   -------------------------------------------------------------------------- */
+
+.site-footer {
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--border);
+  padding-block: var(--sp-16) var(--sp-8);
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) repeat(4, minmax(0, 1fr));
+  gap: var(--sp-10) var(--sp-8);
+}
+
+@media (max-width: 1000px) {
+  .site-footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .site-footer__brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 520px) {
+  .site-footer__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+.site-footer__brand p {
+  max-width: 34ch;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  margin-top: var(--sp-4);
+}
+
+.footer-col h3 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: var(--sp-4);
+}
+
+.footer-col ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.footer-col a {
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+.footer-col a:hover { color: var(--display); }
+
+.site-footer__base {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-top: var(--sp-16);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-xs);
+  color: var(--faint);
+}
+
+.site-footer__legal {
+  display: flex;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   8. Utilities
+   -------------------------------------------------------------------------- */
+
+.text-center  { text-align: center; }
+.text-lead    { font-size: var(--fs-lead); line-height: 1.55; }
+.text-sm      { font-size: var(--fs-sm); }
+.text-xs      { font-size: var(--fs-xs); }
+.text-muted   { color: var(--muted); }
+.text-display { color: var(--display); }
+.text-accent  { color: var(--accent-text); }
+.measure      { max-width: var(--measure); }
+.mt-5         { margin-top: var(--sp-5); }
+.mt-6         { margin-top: var(--sp-6); }
+.mt-8         { margin-top: var(--sp-8); }
+.mt-10        { margin-top: var(--sp-10); }
+.mt-12        { margin-top: var(--sp-12); }
+.mx-auto      { margin-inline: auto; }
+.ml-auto      { margin-left: auto; }
+.full-span    { grid-column: 1 / -1; }
+
+.pt-0         { padding-top: 0; }
+.pt-4         { padding-top: var(--sp-4); }
+.pt-6         { padding-top: var(--sp-6); }
+
+.gap-3          { gap: var(--sp-3); }
+.justify-center { justify-content: center; }
+
+.w-prose      { max-width: 72ch; }
+.w-46         { max-width: 46ch; }
+.w-14         { max-width: 14ch; }
+
+/* Removes the leading rule a block would otherwise inherit (first heading in
+   a .prose run, the footer base bar on the error page). */
+.flush-top {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.icon-inline {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}

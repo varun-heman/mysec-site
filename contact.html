@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact &amp; demo — mySecurity</title>
+<meta name="description" content="Book a mySecurity demo or site survey. Tell us your property type and camera count and we'll come back with a coverage map and a firm quote.">
+<link rel="canonical" href="https://mysecurity.example.com/contact.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact &amp; demo — mySecurity">
+<meta property="og:description" content="Book a demo or a site survey.">
+<meta property="og:image" content="assets/img/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script src="assets/js/theme-init.js"></script>
+<script type="module" src="assets/js/main.js"></script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+      <span class="brand__word"><em>my</em>Security</span>
+    </a>
+    <nav class="site-header__nav" aria-label="Primary" data-nav-links>
+      <a class="nav-link" href="platform.html">Platform</a>
+      <a class="nav-link" href="residential.html">Residential</a>
+      <a class="nav-link" href="commercial.html">Commercial</a>
+      <a class="nav-link" href="pricing.html">Pricing</a>
+      <a class="nav-link" href="about.html">Company</a>
+    </nav>
+    <div class="site-header__actions">
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" aria-hidden="true"><use href="assets/img/icons.svg#icon-sun"></use></svg>
+        <svg class="icon-moon" aria-hidden="true"><use href="assets/img/icons.svg#icon-moon"></use></svg>
+      </button>
+      <a class="btn btn--ghost" href="contact.html">Talk to sales</a>
+      <a class="btn btn--primary" href="contact.html#demo">Book a demo</a>
+      <button class="icon-btn menu-btn" type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-menu"></use></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" data-menu>
+  <nav aria-label="Mobile">
+    <ul>
+      <li><a href="platform.html">Platform</a></li>
+      <li><a href="residential.html">Residential</a></li>
+      <li><a href="commercial.html">Commercial</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">Company</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__actions">
+    <a class="btn btn--primary btn--lg btn--block" href="contact.html#demo">Book a demo</a>
+    <a class="btn btn--secondary btn--lg btn--block" href="contact.html">Talk to sales</a>
+  </div>
+</div>
+
+<main id="main">
+<div class="frame">
+
+  <section class="hero hero--page section--dotted section--seam" id="demo">
+    <div class="wrap">
+      <div class="hero__inner">
+        <span class="eyebrow">Contact</span>
+        <h1>Tell us about your site.</h1>
+        <p class="hero__lead">
+          The more you can share — camera count, gate hardware, floor plan — the
+          more useful our first reply will be. No sales sequence, no drip
+          campaign.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--seam pt-6">
+    <div class="wrap">
+      <div class="split">
+
+        <!-- Form -->
+        <div data-reveal>
+          <!--
+            Netlify Forms: the data-netlify attribute and the hidden form-name
+            field are what register the form at deploy time. form.js posts it
+            over fetch; without JS the browser posts it normally.
+          -->
+          <form class="form" name="demo-request" method="POST"
+                action="/" data-netlify="true" netlify-honeypot="company-website" data-form>
+            <input type="hidden" name="form-name" value="demo-request">
+            <p class="visually-hidden">
+              <label>Leave this field empty: <input name="company-website" tabindex="-1" autocomplete="off"></label>
+            </p>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="name">Your name</label>
+                <input id="name" name="name" type="text" autocomplete="name" required placeholder="Priya Raman">
+              </div>
+              <div class="field">
+                <label for="email">Work email</label>
+                <input id="email" name="email" type="email" autocomplete="email" required placeholder="priya@company.com">
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+91 98000 00000">
+              </div>
+              <div class="field">
+                <label for="org">Company or community</label>
+                <input id="org" name="organisation" type="text" autocomplete="organization" placeholder="Riverside Estate">
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="type">Property type</label>
+                <select id="type" name="property_type" required>
+                  <option value="">Select one</option>
+                  <option>Independent home / villa</option>
+                  <option>Apartment building</option>
+                  <option>Gated community</option>
+                  <option>Office</option>
+                  <option>Retail</option>
+                  <option>Warehouse / logistics</option>
+                  <option>Manufacturing</option>
+                  <option>Multi-site portfolio</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="cameras">Approximate cameras</label>
+                <select id="cameras" name="camera_count" required>
+                  <option value="">Select one</option>
+                  <option>Fewer than 8</option>
+                  <option>8 – 16</option>
+                  <option>17 – 40</option>
+                  <option>41 – 80</option>
+                  <option>81 – 200</option>
+                  <option>More than 200</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="message">What are you trying to solve?</label>
+              <textarea id="message" name="message" rows="5"
+                        placeholder="e.g. Three gates, a lot of contractor traffic, and no reliable record of who was on site when something goes missing."></textarea>
+              <span class="field__hint">Existing hardware brands and known problem areas are especially useful.</span>
+            </div>
+
+            <label class="checkbox">
+              <input type="checkbox" name="consent" required>
+              <span>
+                I agree that mySecurity may contact me about this enquiry, and I've
+                read the <a class="text-accent" href="privacy.html">privacy notice</a>.
+              </span>
+            </label>
+
+            <div class="row">
+              <button class="btn btn--primary btn--lg" type="submit">
+                Send request
+                <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+              </button>
+              <span class="text-muted text-xs">Typical reply: one business day.</span>
+            </div>
+
+            <p class="form__status" role="status" data-form-status hidden></p>
+          </form>
+        </div>
+
+        <!-- Aside -->
+        <div class="stack-8" data-reveal>
+          <div class="card">
+            <span class="eyebrow eyebrow--bare">What happens next</span>
+            <ol class="ticks mt-6">
+              <li><strong class="text-display">We read it properly.</strong> A solutions engineer, not a form-router.</li>
+              <li><strong class="text-display">A 30-minute call.</strong> Live product, your scenarios, honest answers about limits.</li>
+              <li><strong class="text-display">A site survey.</strong> On site or remote, depending on size.</li>
+              <li><strong class="text-display">A written proposal.</strong> Coverage map, device compatibility report, firm price, timeline.</li>
+            </ol>
+          </div>
+
+          <div class="card">
+            <span class="eyebrow eyebrow--bare">Direct</span>
+            <ul class="stack mt-6">
+              <li class="row">
+                <svg class="icon-inline" aria-hidden="true"><use href="assets/img/icons.svg#icon-mail"></use></svg>
+                <a class="text-accent" href="mailto:hello@mysecurity.ai">hello@mysecurity.ai</a>
+              </li>
+              <li class="row">
+                <svg class="icon-inline" aria-hidden="true"><use href="assets/img/icons.svg#icon-phone"></use></svg>
+                <a class="text-accent" href="tel:+918000000000">+91 80 0000 0000</a>
+              </li>
+              <li class="row">
+                <svg class="icon-inline" aria-hidden="true"><use href="assets/img/icons.svg#icon-pin"></use></svg>
+                <span class="text-muted text-sm">Indiranagar, Bengaluru 560038 · Business Bay, Dubai</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <span class="eyebrow eyebrow--bare">Existing customer?</span>
+            <p class="mt-6">
+              Support requests go through the console so they arrive with your
+              site context attached. For anything urgent and out of hours, use
+              the 24/7 number on your service sheet.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+          <span class="brand__word"><em>my</em>Security</span>
+        </a>
+        <p>
+          AI security operations for residential and commercial property.
+          One system for cameras, gates, visitors, assets and emergencies.
+        </p>
+        <div class="row mt-5">
+          <a class="icon-btn" href="#" aria-label="mySecurity on LinkedIn"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-linkedin"></use></svg></a>
+          <a class="icon-btn" href="#" aria-label="mySecurity on X"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-x"></use></svg></a>
+          <a class="icon-btn" href="#" aria-label="mySecurity on YouTube"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-youtube"></use></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="platform.html">Platform</a></li>
+          <li><a href="platform.html#video">Video intelligence</a></li>
+          <li><a href="platform.html#access">Access &amp; gates</a></li>
+          <li><a href="platform.html#visitors">Visitor management</a></li>
+          <li><a href="platform.html#emergency">Emergency response</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Solutions</h3>
+        <ul>
+          <li><a href="residential.html">Homes &amp; villas</a></li>
+          <li><a href="residential.html#communities">Gated communities</a></li>
+          <li><a href="commercial.html">Offices &amp; retail</a></li>
+          <li><a href="commercial.html#industrial">Warehousing</a></li>
+          <li><a href="commercial.html#portfolio">Multi-site portfolios</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html#demo">Book a demo</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:hello@mysecurity.ai">hello@mysecurity.ai</a></li>
+          <li><a href="tel:+918000000000">+91 80 0000 0000</a></li>
+          <li><span class="text-muted text-sm">Bengaluru · Dubai</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__base">
+      <span>© <span data-year>2026</span> mySecurity Technologies. All rights reserved.</span>
+      <div class="site-footer__legal">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html#security">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

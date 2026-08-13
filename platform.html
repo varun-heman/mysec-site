@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Platform — mySecurity</title>
+<meta name="description" content="How the mySecurity platform works: edge appliance, vision and sensor models, policy engine and automated response across CCTV, gates, visitors, assets and emergencies.">
+<link rel="canonical" href="https://mysecurity.example.com/platform.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Platform — mySecurity">
+<meta property="og:description" content="Edge intelligence, a policy engine and automated response — across every device on your site.">
+<meta property="og:image" content="assets/img/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script src="assets/js/theme-init.js"></script>
+<script type="module" src="assets/js/main.js"></script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+      <span class="brand__word"><em>my</em>Security</span>
+    </a>
+    <nav class="site-header__nav" aria-label="Primary" data-nav-links>
+      <a class="nav-link" href="platform.html">Platform</a>
+      <a class="nav-link" href="residential.html">Residential</a>
+      <a class="nav-link" href="commercial.html">Commercial</a>
+      <a class="nav-link" href="pricing.html">Pricing</a>
+      <a class="nav-link" href="about.html">Company</a>
+    </nav>
+    <div class="site-header__actions">
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" aria-hidden="true"><use href="assets/img/icons.svg#icon-sun"></use></svg>
+        <svg class="icon-moon" aria-hidden="true"><use href="assets/img/icons.svg#icon-moon"></use></svg>
+      </button>
+      <a class="btn btn--ghost" href="contact.html">Talk to sales</a>
+      <a class="btn btn--primary" href="contact.html#demo">Book a demo</a>
+      <button class="icon-btn menu-btn" type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-menu"></use></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" data-menu>
+  <nav aria-label="Mobile">
+    <ul>
+      <li><a href="platform.html">Platform</a></li>
+      <li><a href="residential.html">Residential</a></li>
+      <li><a href="commercial.html">Commercial</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">Company</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__actions">
+    <a class="btn btn--primary btn--lg btn--block" href="contact.html#demo">Book a demo</a>
+    <a class="btn btn--secondary btn--lg btn--block" href="contact.html">Talk to sales</a>
+  </div>
+</div>
+
+<main id="main">
+<div class="frame">
+
+  <!-- Hero -->
+  <section class="hero hero--page section--dotted section--seam">
+    <div class="wrap">
+      <div class="hero__inner">
+        <span class="eyebrow">Platform</span>
+        <h1>A security system that understands its own site.</h1>
+        <p class="hero__lead">
+          mySecurity is one platform with four layers: an edge appliance that
+          talks to your hardware, models that turn signals into meaning, a
+          policy engine that decides, and actions that actually happen.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="contact.html#demo">
+            Book a technical walkthrough
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+          <a class="btn btn--secondary btn--lg" href="#architecture">See the architecture</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="section" id="architecture">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Architecture</span>
+        <h2>Four layers, one loop.</h2>
+        <p>
+          The loop runs continuously, on site, whether or not anyone is
+          watching and whether or not the internet is up.
+        </p>
+      </div>
+
+      <div class="grid grid--4" data-reveal-group>
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-plug"></use></svg></span>
+          <h3>1 · Device layer</h3>
+          <p>
+            The mySecurity Edge appliance discovers and drives your hardware:
+            ONVIF/RTSP cameras, gate controllers, OSDP and Wiegand readers,
+            intercoms, alarm panels, Modbus and MQTT sensors.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-brain"></use></svg></span>
+          <h3>2 · Perception</h3>
+          <p>
+            Vision models describe each scene — people, vehicles, plates,
+            objects, posture, direction, dwell — and sensor models track
+            temperature, contact, vibration and flow.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-route"></use></svg></span>
+          <h3>3 · Policy</h3>
+          <p>
+            Your rules, schedules, zones and escalation ladders. Written in
+            plain language, versioned, testable against historical footage
+            before you turn them on.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-bell"></use></svg></span>
+          <h3>4 · Response</h3>
+          <p>
+            Relays, locks, sirens, gate motors, push notifications, calls,
+            SMS, WhatsApp, PSIM/VMS hand-off and third-party monitoring
+            centres — with an evidence trail behind each one.
+          </p>
+        </article>
+      </div>
+
+      <div class="console mt-12" data-reveal>
+        <div class="console__bar">
+          <div class="console__dots"><span></span><span></span><span></span></div>
+          <span class="console__title">Signal path</span>
+        </div>
+        <div class="console__stage console__stage--full">
+          <svg class="siteplan" viewBox="0 0 660 150" role="img"
+               aria-label="Diagram: cameras, readers and sensors feed the on-site edge appliance, which runs perception and policy, then triggers responses and syncs events to the cloud console.">
+            <!-- Column 1: devices -->
+            <g>
+              <rect class="sp-structure" x="14" y="18" width="118" height="26" rx="5"/>
+              <rect class="sp-structure" x="14" y="56" width="118" height="26" rx="5"/>
+              <rect class="sp-structure" x="14" y="94" width="118" height="26" rx="5"/>
+              <text class="sp-label" x="28" y="35">Cameras</text>
+              <text class="sp-label" x="28" y="73">Gates / readers</text>
+              <text class="sp-label" x="28" y="111">Sensors / panels</text>
+            </g>
+
+            <!-- Links into edge -->
+            <path class="sp-beam" d="M132 31h58v38h20"/>
+            <path class="sp-beam" d="M132 69h78"/>
+            <path class="sp-beam" d="M132 107h58V69h20"/>
+
+            <!-- Column 2: edge -->
+            <rect class="sp-structure" x="212" y="40" width="132" height="58" rx="7"/>
+            <text class="sp-label" x="228" y="62">mySecurity Edge</text>
+            <text class="sp-label" x="228" y="80">Perception + policy</text>
+            <circle class="sp-ping" cx="278" cy="69" r="30"/>
+
+            <!-- Links out -->
+            <path class="sp-beam" d="M344 69h56v-38h20"/>
+            <path class="sp-beam" d="M344 69h76"/>
+            <path class="sp-beam" d="M344 69h56v38h20"/>
+
+            <!-- Column 3: responses -->
+            <g>
+              <rect class="sp-structure" x="422" y="18" width="128" height="26" rx="5"/>
+              <rect class="sp-structure" x="422" y="56" width="128" height="26" rx="5"/>
+              <rect class="sp-structure" x="422" y="94" width="128" height="26" rx="5"/>
+              <text class="sp-label" x="436" y="35">Local actions</text>
+              <text class="sp-label" x="436" y="73">People notified</text>
+              <text class="sp-label" x="436" y="111">Evidence stored</text>
+            </g>
+
+            <!-- Cloud -->
+            <path class="sp-ground" d="M550 69h40"/>
+            <rect class="sp-structure" x="590" y="52" width="56" height="34" rx="7"/>
+            <text class="sp-label" x="600" y="73">Console</text>
+
+            <!-- Baseline note -->
+            <path class="sp-ground" d="M14 138h632"/>
+            <text class="sp-label" x="14" y="134">Everything left of the console keeps running offline</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capability deep dives -->
+  <section class="section" id="video">
+    <div class="wrap">
+      <div class="split">
+        <div class="stack-6" data-reveal>
+          <span class="eyebrow">Video intelligence</span>
+          <h2>Search your cameras the way you'd ask a guard.</h2>
+          <p class="text-muted text-lead">
+            Motion detection tells you something moved. mySecurity tells you a
+            delivery van stopped at bay 3 for eleven minutes and nobody got out.
+          </p>
+          <ul class="ticks">
+            <li>Person, vehicle, plate, package, bag, weapon-shape and animal classes</li>
+            <li>Behaviour: loitering, tailgating, running, falling, crowd build-up, wrong-way</li>
+            <li>State: door left open, gate stuck, camera blinded, light failed</li>
+            <li>Plain-English search across weeks of footage — “white pickup at the north gate on Tuesday night”</li>
+            <li>Face and plate recognition, opt-in per site and per zone</li>
+          </ul>
+        </div>
+        <div class="card" data-reveal>
+          <span class="eyebrow eyebrow--bare">Example query</span>
+          <div class="stack-2 mt-6">
+            <p class="feed__meta">&gt; anyone near the pump room after 22:00 this week</p>
+          </div>
+          <ul class="feed mt-6">
+            <li class="feed__item" data-level="alert">
+              <span class="feed__glyph"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-camera"></use></svg></span>
+              <div>
+                <p class="feed__title">Two people, pump room corridor, 23:41</p>
+                <p class="feed__meta">CAM-22 · 4 MIN 12 S · NO BADGE SCAN</p>
+              </div>
+            </li>
+            <li class="feed__item">
+              <span class="feed__glyph"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-camera"></use></svg></span>
+              <div>
+                <p class="feed__title">Maintenance contractor, pump room, 22:15</p>
+                <p class="feed__meta">CAM-22 · WORK ORDER WO-3391 · MATCHED</p>
+              </div>
+            </li>
+            <li class="feed__item">
+              <span class="feed__glyph"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-eye"></use></svg></span>
+              <div>
+                <p class="feed__title">No other activity in this zone this week</p>
+                <p class="feed__meta">6 NIGHTS SCANNED · 0 UNEXPLAINED</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="access">
+    <div class="wrap">
+      <div class="split split--reverse">
+        <div class="grid grid--2" data-reveal-group>
+          <div class="card">
+            <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-gate"></use></svg></span>
+            <h4>ANPR gate entry</h4>
+            <p>Known plates open the barrier without a stop. Unknown plates get an intercom prompt, not an open gate.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-door"></use></svg></span>
+            <h4>Door policy</h4>
+            <p>Time windows, dual authorisation, anti-passback and first-person-in rules, per door and per role.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-user"></use></svg></span>
+            <h4>Tailgating checks</h4>
+            <p>The camera above the reader counts bodies against badges and flags the mismatch in real time.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-clock"></use></svg></span>
+            <h4>Scheduled access</h4>
+            <p>Deliveries, cleaning crews and shift changes get exactly the window they need, then it closes itself.</p>
+          </div>
+        </div>
+
+        <div class="stack-6" data-reveal>
+          <span class="eyebrow">Access &amp; gates</span>
+          <h2>Entry decisions that don't depend on who's on duty.</h2>
+          <p class="text-muted text-lead">
+            The most common security failure isn't a break-in — it's a gate held
+            open, a door propped, a badge shared. mySecurity drives the hardware
+            directly, so the policy is the behaviour.
+          </p>
+          <a class="link-arrow" href="contact.html#demo">
+            See it on your gate hardware
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="visitors">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <span class="eyebrow">Visitors &amp; guests</span>
+        <h2>Every arrival, accounted for.</h2>
+        <p>
+          From a friend dropping in to a hundred-contractor shutdown — the same
+          flow, scaled to the situation.
+        </p>
+      </div>
+
+      <div class="steps" data-reveal-group data-reveal-step="80">
+        <article class="step">
+          <span class="step-index">01</span>
+          <h3>Invite</h3>
+          <p>The host issues a pass from their phone or the console. It carries a purpose, a window and a set of allowed zones.</p>
+        </article>
+        <article class="step">
+          <span class="step-index">02</span>
+          <h3>Arrive</h3>
+          <p>QR at the gate, plate at the barrier or ID at the desk. Documents and inductions are checked before the pass activates.</p>
+        </article>
+        <article class="step">
+          <span class="step-index">03</span>
+          <h3>Move</h3>
+          <p>The visitor is tracked against their allowed zones. Wandering into a restricted area notifies the host, not the whole site.</p>
+        </article>
+        <article class="step">
+          <span class="step-index">04</span>
+          <h3>Leave</h3>
+          <p>Exit is recorded and the pass dies. Anyone still on site at close of day appears on a short, actionable list.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="assets">
+    <div class="wrap">
+      <div class="split">
+        <div class="stack-6" data-reveal>
+          <span class="eyebrow">Assets &amp; environment</span>
+          <h2>Watch the things that fail quietly.</h2>
+          <p class="text-muted text-lead">
+            Most losses aren't dramatic. A freezer drifts two degrees over a
+            long weekend. A pump trips at 3am. A pallet leaves on the wrong
+            truck. These are monitoring problems, and they belong in the same
+            system as the cameras.
+          </p>
+          <ul class="ticks">
+            <li>Cold-chain and cleanroom temperature, humidity and door-open duration</li>
+            <li>Generator fuel, UPS state, water tanks, pump rooms and utility cut-offs</li>
+            <li>High-value stock zones with camera-confirmed movement</li>
+            <li>Server rack access, rack door state and environment</li>
+            <li>Drift detection: alerts on the trend, before the threshold</li>
+          </ul>
+        </div>
+
+        <div class="card" data-reveal>
+          <span class="eyebrow eyebrow--bare">Threshold vs drift</span>
+          <svg class="siteplan mt-6" viewBox="0 0 320 170" role="img"
+               aria-label="Chart showing a sensor reading drifting steadily upward and being flagged well before it crosses the alarm threshold.">
+            <path class="sp-ground" d="M30 20h270M30 60h270M30 100h270M30 140h270"/>
+            <path class="sp-structure" d="M30 12v134h272"/>
+            <path d="M30 128 L70 124 L110 122 L150 112 L190 96 L230 74 L270 46 L298 28"
+                  fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/>
+            <path class="sp-ground" d="M30 34h272" stroke="var(--accent)" opacity="0.5"/>
+            <text class="sp-label" x="238" y="30">Alarm threshold</text>
+            <g>
+              <circle class="sp-ping" cx="190" cy="96" r="16"/>
+              <circle class="sp-node" cx="190" cy="96" r="4.5"/>
+              <circle class="sp-node-core" cx="190" cy="96" r="1.8"/>
+            </g>
+            <text class="sp-label" x="146" y="120">Flagged here</text>
+            <text class="sp-label" x="30" y="160">Mon</text>
+            <text class="sp-label" x="270" y="160">Sun</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="emergency">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Emergency management</span>
+        <h2>The playbook runs itself.</h2>
+        <p>
+          In a real emergency, nobody reads the SOP folder. mySecurity executes
+          it: in order, in seconds, and with a record of every step.
+        </p>
+      </div>
+
+      <div class="grid grid--3" data-reveal-group>
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-alert"></use></svg></span>
+          <h4>Fire &amp; smoke</h4>
+          <p>
+            Panel signal plus visual confirmation. Egress doors release, the
+            affected zone sounds, lifts recall, and the muster list starts
+            populating from access records.
+          </p>
+        </article>
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-shield"></use></svg></span>
+          <h4>Intrusion</h4>
+          <p>
+            Perimeter breach escalates through verify → deter → notify →
+            dispatch, with talk-down over the nearest speaker and clips already
+            attached to the guard's alert.
+          </p>
+        </article>
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-phone"></use></svg></span>
+          <h4>Medical &amp; duress</h4>
+          <p>
+            Fall detection, panic buttons and duress codes route to the nearest
+            responder with the location, the camera view and the person's
+            emergency contacts.
+          </p>
+        </article>
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-route"></use></svg></span>
+          <h4>Escalation ladders</h4>
+          <p>
+            If the guard doesn't acknowledge in 60 seconds, it goes to the
+            supervisor. Then the manager. Then the monitoring centre. No alert
+            dies in someone's pocket.
+          </p>
+        </article>
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-clock"></use></svg></span>
+          <h4>Drills</h4>
+          <p>
+            Run the whole playbook in test mode. Get a timing report showing
+            where the response actually slowed down, not where you assumed it
+            would.
+          </p>
+        </article>
+        <article class="card">
+          <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-chart"></use></svg></span>
+          <h4>After-action record</h4>
+          <p>
+            A single exportable timeline: sensor readings, clips, decisions,
+            who was notified, who acknowledged, what was done. Insurer- and
+            auditor-ready.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deployment options -->
+  <section class="section section--surface" id="deployment">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Deployment</span>
+        <h2>Choose where the intelligence lives.</h2>
+      </div>
+
+      <div class="table-scroll" data-reveal>
+        <table class="data-table">
+          <caption class="visually-hidden">Comparison of edge, hybrid and private deployment options</caption>
+          <thead>
+            <tr>
+              <th scope="col">Capability</th>
+              <th scope="col">Edge only</th>
+              <th scope="col">Hybrid (default)</th>
+              <th scope="col">Private cloud</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Video leaves the site</td><td class="no">Never</td><td class="no">Only clips you share</td><td>To your own tenancy</td></tr>
+            <tr><td>Works without internet</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">Requires link</td></tr>
+            <tr><td>Remote console</td><td class="no">On-site only</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr><td>Multi-site portfolio view</td><td class="no">—</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr><td>Model updates</td><td>Manual, scheduled</td><td>Automatic</td><td>Automatic</td></tr>
+            <tr><td>Typical fit</td><td>High-security, air-gapped</td><td>Most homes and businesses</td><td>Regulated enterprises</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="wrap">
+      <div class="cta" data-reveal>
+        <span class="eyebrow">Next step</span>
+        <h2>Bring us your camera list.</h2>
+        <p>
+          We'll tell you what each device can and can't support, where the gaps
+          are, and what the first thirty days would look like.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="contact.html#demo">
+            Book a demo
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+          <a class="btn btn--secondary btn--lg" href="pricing.html">See pricing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+          <span class="brand__word"><em>my</em>Security</span>
+        </a>
+        <p>
+          AI security operations for residential and commercial property.
+          One system for cameras, gates, visitors, assets and emergencies.
+        </p>
+        <div class="row mt-5">
+          <a class="icon-btn" href="#" aria-label="mySecurity on LinkedIn"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-linkedin"></use></svg></a>
+          <a class="icon-btn" href="#" aria-label="mySecurity on X"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-x"></use></svg></a>
+          <a class="icon-btn" href="#" aria-label="mySecurity on YouTube"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-youtube"></use></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="platform.html">Platform</a></li>
+          <li><a href="platform.html#video">Video intelligence</a></li>
+          <li><a href="platform.html#access">Access &amp; gates</a></li>
+          <li><a href="platform.html#visitors">Visitor management</a></li>
+          <li><a href="platform.html#emergency">Emergency response</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Solutions</h3>
+        <ul>
+          <li><a href="residential.html">Homes &amp; villas</a></li>
+          <li><a href="residential.html#communities">Gated communities</a></li>
+          <li><a href="commercial.html">Offices &amp; retail</a></li>
+          <li><a href="commercial.html#industrial">Warehousing</a></li>
+          <li><a href="commercial.html#portfolio">Multi-site portfolios</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html#demo">Book a demo</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:hello@mysecurity.ai">hello@mysecurity.ai</a></li>
+          <li><a href="tel:+918000000000">+91 80 0000 0000</a></li>
+          <li><span class="text-muted text-sm">Bengaluru · Dubai</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__base">
+      <span>© <span data-year>2026</span> mySecurity Technologies. All rights reserved.</span>
+      <div class="site-footer__legal">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html#security">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

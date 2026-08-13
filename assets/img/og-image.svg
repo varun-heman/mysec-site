@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="0%" r="70%">
+      <stop offset="0%" stop-color="#00B074" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#00B074" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#FFFFFF" fill-opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0D0D0D"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Frame rails -->
+  <path d="M80 0v630M1120 0v630" stroke="#FFFFFF" stroke-opacity="0.085" stroke-dasharray="6 6"/>
+
+  <!-- Brand mark -->
+  <g transform="translate(80 84) scale(1.5)">
+    <path d="M16 2.5 4.5 7.1v8.6c0 6.9 4.7 12.9 11.5 14.8 6.8-1.9 11.5-7.9 11.5-14.8V7.1L16 2.5Z"
+          fill="none" stroke="#00B074" stroke-width="2.2" stroke-linejoin="round"/>
+    <circle cx="16" cy="14.6" r="4.4" fill="none" stroke="#00B074" stroke-width="2.2"/>
+    <circle cx="16" cy="14.6" r="1.6" fill="#00B074"/>
+    <path d="M16 21.8v4" stroke="#00B074" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+  <text x="146" y="122" font-family="Inter Tight, Inter, Helvetica, Arial, sans-serif"
+        font-size="34" font-weight="600" fill="#EDEAE8" letter-spacing="-0.7">
+    <tspan fill="#8E8A87">my</tspan>Security
+  </text>
+
+  <!-- Headline -->
+  <text font-family="Inter Tight, Inter, Helvetica, Arial, sans-serif" font-size="84"
+        font-weight="500" fill="#EDEAE8" letter-spacing="-2.6">
+    <tspan x="80" y="316">One AI watching every</tspan>
+    <tspan x="80" y="404">camera, gate and door.</tspan>
+  </text>
+
+  <!-- Sub -->
+  <text x="80" y="474" font-family="Inter, Helvetica, Arial, sans-serif" font-size="26" fill="#8E8A87">
+    AI security operations for residential and commercial property.
+  </text>
+
+  <!-- Footer strip -->
+  <path d="M80 546h1040" stroke="#272727"/>
+  <text x="80" y="586" font-family="JetBrains Mono, ui-monospace, monospace" font-size="18"
+        fill="#6A6764" letter-spacing="2.4">
+    CCTV · GATES · VISITORS · ASSETS · EMERGENCIES
+  </text>
+</svg>

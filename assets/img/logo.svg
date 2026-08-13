@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="mySecurity">
+  <!-- Shield outline -->
+  <path d="M16 2.5 4.5 7.1v8.6c0 6.9 4.7 12.9 11.5 14.8 6.8-1.9 11.5-7.9 11.5-14.8V7.1L16 2.5Z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Aperture / lens at the centre: the "watching" half of the mark -->
+  <circle cx="16" cy="14.6" r="4.4" stroke="currentColor" stroke-width="2"/>
+  <circle cx="16" cy="14.6" r="1.5" fill="currentColor"/>
+  <!-- Signal sweep -->
+  <path d="M16 21.6v4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>

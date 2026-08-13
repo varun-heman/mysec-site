@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing — mySecurity</title>
+<meta name="description" content="mySecurity pricing: per-site plans for homes, gated communities and commercial properties. Hardware, software and monitoring costs explained.">
+<link rel="canonical" href="https://mysecurity.example.com/pricing.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pricing — mySecurity">
+<meta property="og:description" content="Per-site plans for homes, communities and commercial properties.">
+<meta property="og:image" content="assets/img/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<script src="assets/js/theme-init.js"></script>
+<script type="module" src="assets/js/main.js"></script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+      <span class="brand__word"><em>my</em>Security</span>
+    </a>
+    <nav class="site-header__nav" aria-label="Primary" data-nav-links>
+      <a class="nav-link" href="platform.html">Platform</a>
+      <a class="nav-link" href="residential.html">Residential</a>
+      <a class="nav-link" href="commercial.html">Commercial</a>
+      <a class="nav-link" href="pricing.html">Pricing</a>
+      <a class="nav-link" href="about.html">Company</a>
+    </nav>
+    <div class="site-header__actions">
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" aria-hidden="true"><use href="assets/img/icons.svg#icon-sun"></use></svg>
+        <svg class="icon-moon" aria-hidden="true"><use href="assets/img/icons.svg#icon-moon"></use></svg>
+      </button>
+      <a class="btn btn--ghost" href="contact.html">Talk to sales</a>
+      <a class="btn btn--primary" href="contact.html#demo">Book a demo</a>
+      <button class="icon-btn menu-btn" type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-menu"></use></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" data-menu>
+  <nav aria-label="Mobile">
+    <ul>
+      <li><a href="platform.html">Platform</a></li>
+      <li><a href="residential.html">Residential</a></li>
+      <li><a href="commercial.html">Commercial</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">Company</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-menu__actions">
+    <a class="btn btn--primary btn--lg btn--block" href="contact.html#demo">Book a demo</a>
+    <a class="btn btn--secondary btn--lg btn--block" href="contact.html">Talk to sales</a>
+  </div>
+</div>
+
+<main id="main">
+<div class="frame">
+
+  <section class="hero hero--page section--dotted section--seam">
+    <div class="wrap">
+      <div class="hero__inner">
+        <span class="eyebrow">Pricing</span>
+        <h1>Priced per site, not per panic.</h1>
+        <p class="hero__lead">
+          One subscription covers the software, the models and the support. The
+          edge appliance is a one-off. Nothing is metered by alert, so nobody is
+          ever tempted to turn detection down.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--seam pt-4">
+    <div class="wrap">
+      <div class="grid grid--3 grid--wide" data-reveal-group>
+
+        <article class="plan">
+          <div class="stack-2">
+            <span class="eyebrow">Home</span>
+            <p class="text-muted text-sm">Villas and apartments, up to 16 cameras.</p>
+          </div>
+          <p class="plan__price">₹4,900 <small>/ month per site</small></p>
+          <div class="plan__divider"></div>
+          <ul class="ticks">
+            <li>Up to 16 cameras and 4 access points</li>
+            <li>Video intelligence and behaviour alerts</li>
+            <li>Gate automation and guest passes</li>
+            <li>30-day event history, 7-day clip retention</li>
+            <li>Mobile app for the whole household</li>
+            <li>Email and chat support</li>
+          </ul>
+          <a class="btn btn--secondary btn--block" href="contact.html#demo">Book a home survey</a>
+        </article>
+
+        <article class="plan plan--featured">
+          <div class="stack-2">
+            <span class="row gap-3">
+              <span class="eyebrow">Community</span>
+              <span class="badge badge--accent">Most chosen</span>
+            </span>
+            <p class="text-muted text-sm">Gated communities, small commercial sites.</p>
+          </div>
+          <p class="plan__price">₹18,500 <small>/ month per site</small></p>
+          <div class="plan__divider"></div>
+          <ul class="ticks">
+            <li>Up to 80 cameras and 20 access points</li>
+            <li>ANPR, visitor management and staff attendance</li>
+            <li>Asset and environment sensors included</li>
+            <li>Emergency playbooks and escalation ladders</li>
+            <li>90-day event history, 30-day clip retention</li>
+            <li>Committee and guard dashboards</li>
+            <li>Priority support with a named engineer</li>
+          </ul>
+          <a class="btn btn--primary btn--block" href="contact.html#demo">Book a demo</a>
+        </article>
+
+        <article class="plan">
+          <div class="stack-2">
+            <span class="eyebrow">Enterprise</span>
+            <p class="text-muted text-sm">Large or multi-site portfolios.</p>
+          </div>
+          <p class="plan__price">Custom</p>
+          <div class="plan__divider"></div>
+          <ul class="ticks">
+            <li>Unlimited cameras, access points and sites</li>
+            <li>Portfolio dashboard and policy templates</li>
+            <li>Contractor and compliance workflows</li>
+            <li>SSO, SCIM and scoped role hierarchies</li>
+            <li>Private cloud or fully on-premise deployment</li>
+            <li>Custom retention, legal hold and data residency</li>
+            <li>SLA, quarterly reviews and on-site support</li>
+          </ul>
+          <a class="btn btn--secondary btn--block" href="contact.html">Talk to sales</a>
+        </article>
+
+      </div>
+
+      <p class="text-muted text-center mt-10 text-xs">
+        Prices exclude GST. Indicative list pricing for Indian deployments —
+        regional pricing differs. Every quote is confirmed after a site survey.
+      </p>
+    </div>
+  </section>
+
+  <!-- What else costs money -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">The honest bit</span>
+        <h2>What isn't in the subscription.</h2>
+        <p>
+          Security vendors are famous for surprise line items. Here is the full
+          list of things you may also pay for.
+        </p>
+      </div>
+
+      <div class="table-scroll" data-reveal>
+        <table class="data-table">
+          <caption class="visually-hidden">Additional costs beyond the subscription</caption>
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">When you need it</th>
+              <th scope="col">Typical cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Edge appliance</td>
+              <td>One per site. Sized to camera count.</td>
+              <td>₹45,000 – ₹2,80,000 one-off</td>
+            </tr>
+            <tr>
+              <td>Installation &amp; commissioning</td>
+              <td>Survey, mounting, cabling checks, tuning.</td>
+              <td>Quoted per site</td>
+            </tr>
+            <tr>
+              <td>Replacement cameras</td>
+              <td>Only where an existing camera physically can't do the job.</td>
+              <td>At cost, your choice of brand</td>
+            </tr>
+            <tr>
+              <td>Gate / reader controllers</td>
+              <td>If your existing hardware has no controllable interface.</td>
+              <td>At cost</td>
+            </tr>
+            <tr>
+              <td>Extended clip retention</td>
+              <td>Beyond your plan's included window.</td>
+              <td>Per TB per month</td>
+            </tr>
+            <tr>
+              <td>Monitoring-centre response</td>
+              <td>Optional 24/7 human verification and dispatch.</td>
+              <td>Add-on, per site</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="wrap wrap--narrow">
+      <div class="section-head">
+        <span class="eyebrow">Pricing questions</span>
+        <h2>Before you ask.</h2>
+      </div>
+
+      <div class="accordion" data-accordion="exclusive">
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger aria-expanded="true" aria-controls="pf-1" id="pf-1-t">
+              Is there a contract lock-in?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="pf-1" role="region" aria-labelledby="pf-1-t">
+            <div>
+              Annual terms are standard because deployment involves hardware and
+              tuning work. Monthly is available at a premium. If you leave, the
+              appliance is yours and we'll hand over your event history and
+              retained clips in an open format.
+            </div>
+          </div>
+        </div>
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger aria-expanded="false" aria-controls="pf-2" id="pf-2-t">
+              Do you charge per alert or per camera?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="pf-2" role="region" aria-labelledby="pf-2-t">
+            <div>
+              Neither. Plans are banded by site size, so adding a camera inside
+              your band costs nothing and there's never a reason to reduce
+              detection to save money. You only move up when you outgrow a band.
+            </div>
+          </div>
+        </div>
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger aria-expanded="false" aria-controls="pf-3" id="pf-3-t">
+              Can we trial it first?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="pf-3" role="region" aria-labelledby="pf-3-t">
+            <div>
+              Yes — a 30-day pilot on one site, with the appliance on loan. You
+              keep the incident data either way, and we'll write up what the
+              system caught that your current setup didn't.
+            </div>
+          </div>
+        </div>
+        <div class="accordion__item">
+          <h3>
+            <button class="accordion__trigger" type="button" data-accordion-trigger aria-expanded="false" aria-controls="pf-4" id="pf-4-t">
+              What about existing AMC and guard contracts?
+              <span class="accordion__icon" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="accordion__panel" id="pf-4" role="region" aria-labelledby="pf-4-t">
+            <div>
+              We work alongside them. mySecurity doesn't require you to change
+              your guard agency or maintenance contractor — and in most cases the
+              incident data makes those contracts easier to hold to account.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta" data-reveal>
+        <span class="eyebrow">Get a real number</span>
+        <h2>A quote takes one survey.</h2>
+        <p>
+          Tell us the site type and camera count and we'll come back with a firm
+          price, including hardware, within two working days.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="contact.html#demo">
+            Request a quote
+            <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+          <a class="btn btn--secondary btn--lg" href="platform.html">Platform detail</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+          <span class="brand__word"><em>my</em>Security</span>
+        </a>
+        <p>
+          AI security operations for residential and commercial property.
+          One system for cameras, gates, visitors, assets and emergencies.
+        </p>
+        <div class="row mt-5">
+          <a class="icon-btn" href="#" aria-label="mySecurity on LinkedIn"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-linkedin"></use></svg></a>
+          <a class="icon-btn" href="#" aria-label="mySecurity on X"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-x"></use></svg></a>
+          <a class="icon-btn" href="#" aria-label="mySecurity on YouTube"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-youtube"></use></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="platform.html">Platform</a></li>
+          <li><a href="platform.html#video">Video intelligence</a></li>
+          <li><a href="platform.html#access">Access &amp; gates</a></li>
+          <li><a href="platform.html#visitors">Visitor management</a></li>
+          <li><a href="platform.html#emergency">Emergency response</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Solutions</h3>
+        <ul>
+          <li><a href="residential.html">Homes &amp; villas</a></li>
+          <li><a href="residential.html#communities">Gated communities</a></li>
+          <li><a href="commercial.html">Offices &amp; retail</a></li>
+          <li><a href="commercial.html#industrial">Warehousing</a></li>
+          <li><a href="commercial.html#portfolio">Multi-site portfolios</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html#demo">Book a demo</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:hello@mysecurity.ai">hello@mysecurity.ai</a></li>
+          <li><a href="tel:+918000000000">+91 80 0000 0000</a></li>
+          <li><span class="text-muted text-sm">Bengaluru · Dubai</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="site-footer__base">
+      <span>© <span data-year>2026</span> mySecurity Technologies. All rights reserved.</span>
+      <div class="site-footer__legal">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html#security">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

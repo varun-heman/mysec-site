@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — mySecurity</title>
+<meta name="robots" content="noindex">
+
+<!-- Absolute paths: Netlify serves this file for any depth of missing URL,
+     so relative asset paths would resolve against the wrong directory. -->
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/layout.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+
+<script src="/assets/js/theme-init.js"></script>
+<script type="module" src="/assets/js/main.js"></script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="/index.html">
+      <svg class="brand__mark" aria-hidden="true"><use href="/assets/img/icons.svg#icon-logo"></use></svg>
+      <span class="brand__word"><em>my</em>Security</span>
+    </a>
+    <nav class="site-header__nav" aria-label="Primary">
+      <a class="nav-link" href="/platform.html">Platform</a>
+      <a class="nav-link" href="/residential.html">Residential</a>
+      <a class="nav-link" href="/commercial.html">Commercial</a>
+      <a class="nav-link" href="/pricing.html">Pricing</a>
+      <a class="nav-link" href="/about.html">Company</a>
+    </nav>
+    <div class="site-header__actions">
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" aria-hidden="true"><use href="/assets/img/icons.svg#icon-sun"></use></svg>
+        <svg class="icon-moon" aria-hidden="true"><use href="/assets/img/icons.svg#icon-moon"></use></svg>
+      </button>
+      <a class="btn btn--primary" href="/contact.html#demo">Book a demo</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="frame">
+  <section class="section section--seam section--dotted">
+    <div class="wrap">
+      <div class="error-page">
+        <span class="error-page__code">Error 404</span>
+        <h1 class="w-14">This one's outside our coverage.</h1>
+        <p class="hero__lead w-46">
+          The page you asked for doesn't exist, or it moved. Everything else is
+          still being watched.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="/index.html">
+            Back to home
+            <svg aria-hidden="true"><use href="/assets/img/icons.svg#icon-arrow-right"></use></svg>
+          </a>
+          <a class="btn btn--secondary btn--lg" href="/contact.html">Contact us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="site-footer__base flush-top">
+      <span>© <span data-year>2026</span> mySecurity Technologies. All rights reserved.</span>
+      <div class="site-footer__legal">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
