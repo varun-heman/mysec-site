@@ -20,6 +20,11 @@ const EVENTS = [
 const MAX_ITEMS = 5;
 const INTERVAL = 3200;
 
+/* How long an incident from the site plan stays pinned to the top of the
+   stream before the ambient rotation reclaims its slot. Long enough to read,
+   short enough that the stream doesn't stall. */
+const PIN_MS = 9000;
+
 function buildItem(event, index) {
   const li = document.createElement("li");
   li.className = "feed__item";
@@ -47,14 +52,47 @@ export function initFeed() {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let cursor = 0;
 
-  const render = (items) => {
-    list.replaceChildren(...items.map(buildItem));
+  /* Incidents raised by the site plan. They sit above the ambient rotation
+     for a while, then expire — so what the plan is showing and what the
+     stream is reporting stay in agreement. */
+  let pinned = [];
+
+  const visible = () => {
+    const now = Date.now();
+    pinned = pinned.filter((p) => now < p.until);
+    return pinned
+      .map((p) => p.event)
+      .concat(
+        Array.from({ length: MAX_ITEMS }, (_, i) => EVENTS[(cursor + i) % EVENTS.length])
+      )
+      .slice(0, MAX_ITEMS);
   };
 
-  const window_ = () =>
-    Array.from({ length: MAX_ITEMS }, (_, i) => EVENTS[(cursor + i) % EVENTS.length]);
+  const render = () => {
+    list.replaceChildren(...visible().map(buildItem));
+  };
 
-  render(window_());
+  render();
+
+  /* The plan dispatches these; going through an event rather than a direct
+     call keeps the two able to exist without each other. */
+  document.addEventListener("mysec:incident", (e) => {
+    const d = e.detail || {};
+    pinned.unshift({
+      until: Date.now() + PIN_MS,
+      event: {
+        icon: d.icon || "alert",
+        /* Carry the severity through. Hardcoding "alert" here would have made
+           every incident look identical in the stream, which is exactly the
+           distinction the plan is drawing. */
+        level: d.level || "alert",
+        title: d.title || "Incident detected",
+        meta: d.meta || ""
+      }
+    });
+    pinned = pinned.slice(0, 2);
+    render();
+  });
 
   if (reduced) return;
 
@@ -62,7 +100,7 @@ export function initFeed() {
 
   const tick = () => {
     cursor = (cursor + 1) % EVENTS.length;
-    render(window_());
+    render();
   };
 
   const start = () => {

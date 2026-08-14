@@ -24,11 +24,15 @@
 <link rel="stylesheet" href="assets/css/components.css">
 <!-- Hero camera. Loaded last so it can override components.css. -->
 <link rel="stylesheet" href="assets/css/lab.css">
+<!-- Live site plan in the console section. -->
+<link rel="stylesheet" href="assets/css/site-plan.css">
 
 <script src="assets/js/theme-init.js"></script>
 <script type="module" src="assets/js/main.js"></script>
 <!-- Drives the hero camera, its light cone and the pointer interaction. -->
 <script defer src="assets/js/hero-camera.js"></script>
+<!-- Raises incidents on the site plan and reports them to the event stream. -->
+<script defer src="assets/js/site-plan.js"></script>
 </head>
 
 <body>
@@ -324,61 +328,338 @@
         </div>
 
         <div class="console__body">
-          <div class="console__stage">
-            <!-- Site plan: a schematic of a monitored property -->
-            <svg class="siteplan" viewBox="0 0 320 210" role="img"
-                 aria-label="Schematic site plan showing camera coverage, gates and sensor nodes across a monitored property">
-              <!-- Ground / boundary -->
-              <rect class="sp-ground" x="10" y="10" width="300" height="190" rx="6"/>
-              <path class="sp-ground" d="M10 150h300"/>
+          <div class="console__stage" data-siteplan>
 
-              <!-- Buildings -->
-              <path class="sp-structure" d="M46 62h84v58H46z"/>
-              <path class="sp-structure" d="M46 62v-14h50v14"/>
-              <path class="sp-structure" d="M186 46h96v74h-96z"/>
-              <path class="sp-structure" d="M186 78h96"/>
-              <path class="sp-structure" d="M218 46v32M250 46v32M218 78v42M250 78v42"/>
+            <div class="siteplan-stage">
+              <img class="siteplan-stage__plan" src="assets/img/society-top.png"
+                   alt="" aria-hidden="true" width="1659" height="951" loading="lazy" decoding="async">
 
-              <!-- Driveway -->
-              <path class="sp-ground" d="M160 200v-50h60"/>
+              <svg class="siteplan-stage__overlay" viewBox="0 0 1000 573"
+                   role="img" aria-label="Live plan of a gated residential estate: cameras covering eight blocks and the shared amenities, with residents, visitors and vehicles tracked as they move through the property.">
+                <defs>
+                  <!-- Cone fill fades to nothing at the far edge, so coverage
+                       falls off rather than ending on a hard arc. Three variants
+                       because a gradient resolves currentColor against itself,
+                       not against whatever references it. -->
+                  <radialGradient id="sp-fade" cx="0" cy="0.5" r="1">
+                    <stop offset="0%"   stop-color="var(--accent)" stop-opacity="0.34"></stop>
+                    <stop offset="55%"  stop-color="var(--accent)" stop-opacity="0.15"></stop>
+                    <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"></stop>
+                  </radialGradient>
+                  <radialGradient id="sp-fade-warn" cx="0" cy="0.5" r="1">
+                    <stop offset="0%"   stop-color="#E9B949" stop-opacity="0.52"></stop>
+                    <stop offset="55%"  stop-color="#E9B949" stop-opacity="0.24"></stop>
+                    <stop offset="100%" stop-color="#E9B949" stop-opacity="0"></stop>
+                  </radialGradient>
+                  <radialGradient id="sp-fade-crit" cx="0" cy="0.5" r="1">
+                    <stop offset="0%"   stop-color="#FF3B30" stop-opacity="0.58"></stop>
+                    <stop offset="55%"  stop-color="#FF3B30" stop-opacity="0.28"></stop>
+                    <stop offset="100%" stop-color="#FF3B30" stop-opacity="0"></stop>
+                  </radialGradient>
+                  <!-- Apex at 0,0 running +x. 46 units ~ a 20m lens here. -->
+                  <path id="sp-cone-shape" d="M0 0 L42.6 -17.2 A46 46 0 0 1 42.6 17.2 Z"></path>
+                </defs>
 
-              <!-- Camera cones -->
-              <path class="sp-cone" d="M40 56 4 92l30 30z"/>
-              <path class="sp-cone" d="M288 40l30 34-30 30z"/>
-              <path class="sp-cone" d="M160 196l-42-30h84z"/>
+                <!-- Cameras sit ON the roads and aim along them, so a subject
+                     stays in coverage as it travels instead of blinking out
+                     between islands. site-plan.js drives each aim. -->
+                <g data-cams>
+                  <g class="sp-cam" data-cam data-x="120" data-y="200" data-aim="0" transform="translate(120 200)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="198" data-y="200" data-aim="180" transform="translate(198 200)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="276" data-y="200" data-aim="0" transform="translate(276 200)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="354" data-y="200" data-aim="180" transform="translate(354 200)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="432" data-y="200" data-aim="0" transform="translate(432 200)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="510" data-y="200" data-aim="180" transform="translate(510 200)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="588" data-y="200" data-aim="0" transform="translate(588 200)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="666" data-y="200" data-aim="180" transform="translate(666 200)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="744" data-y="200" data-aim="0" transform="translate(744 200)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="822" data-y="200" data-aim="180" transform="translate(822 200)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="900" data-y="200" data-aim="0" transform="translate(900 200)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="120" data-y="321" data-aim="180" transform="translate(120 321)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="198" data-y="321" data-aim="0" transform="translate(198 321)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="276" data-y="321" data-aim="180" transform="translate(276 321)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="354" data-y="321" data-aim="0" transform="translate(354 321)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="432" data-y="321" data-aim="180" transform="translate(432 321)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="510" data-y="321" data-aim="0" transform="translate(510 321)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="588" data-y="321" data-aim="180" transform="translate(588 321)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="666" data-y="321" data-aim="0" transform="translate(666 321)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="744" data-y="321" data-aim="180" transform="translate(744 321)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="822" data-y="321" data-aim="0" transform="translate(822 321)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="900" data-y="321" data-aim="180" transform="translate(900 321)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="277" data-y="130" data-aim="90" transform="translate(277 130)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="277" data-y="260" data-aim="-90" transform="translate(277 260)">
+                    <g class="sp-cam__pan" transform="rotate(-90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="277" data-y="395" data-aim="90" transform="translate(277 395)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="525" data-y="130" data-aim="90" transform="translate(525 130)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="525" data-y="260" data-aim="-90" transform="translate(525 260)">
+                    <g class="sp-cam__pan" transform="rotate(-90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="525" data-y="395" data-aim="90" transform="translate(525 395)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="733" data-y="130" data-aim="90" transform="translate(733 130)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="733" data-y="260" data-aim="-90" transform="translate(733 260)">
+                    <g class="sp-cam__pan" transform="rotate(-90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="733" data-y="395" data-aim="90" transform="translate(733 395)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="150" data-y="80" data-aim="0" transform="translate(150 80)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="150" data-y="458" data-aim="180" transform="translate(150 458)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="400" data-y="80" data-aim="0" transform="translate(400 80)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="400" data-y="458" data-aim="180" transform="translate(400 458)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="650" data-y="80" data-aim="180" transform="translate(650 80)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="650" data-y="458" data-aim="0" transform="translate(650 458)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="900" data-y="80" data-aim="180" transform="translate(900 80)">
+                    <g class="sp-cam__pan" transform="rotate(180)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="900" data-y="458" data-aim="0" transform="translate(900 458)">
+                    <g class="sp-cam__pan" transform="rotate(0)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="70" data-y="150" data-aim="90" transform="translate(70 150)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="935" data-y="150" data-aim="-90" transform="translate(935 150)">
+                    <g class="sp-cam__pan" transform="rotate(-90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="70" data-y="300" data-aim="-90" transform="translate(70 300)">
+                    <g class="sp-cam__pan" transform="rotate(-90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="935" data-y="300" data-aim="90" transform="translate(935 300)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="70" data-y="420" data-aim="-90" transform="translate(70 420)">
+                    <g class="sp-cam__pan" transform="rotate(-90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="935" data-y="420" data-aim="90" transform="translate(935 420)">
+                    <g class="sp-cam__pan" transform="rotate(90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                  <g class="sp-cam" data-cam data-x="525" data-y="470" data-aim="-90" transform="translate(525 470)">
+                    <g class="sp-cam__pan" transform="rotate(-90)"><use class="sp-cone" href="#sp-cone-shape"></use></g>
+                    <circle class="sp-node" r="2.4"></circle>
+                    <circle class="sp-node-core" r="1"></circle>
+                    <text class="sp-cam__bang" y="-13">!</text>
+                  </g>
+                </g>
 
-              <!-- Perimeter beam -->
-              <path class="sp-beam" d="M10 172h300"/>
+                <!-- ---- labels ---- -->
+                <text class="sp-label" x="180" y="140">Block A</text>
+                <text class="sp-label" x="400" y="140">Block B</text>
+                <text class="sp-label" x="615" y="140">Block C</text>
+                <text class="sp-label" x="830" y="140">Block D</text>
+                <text class="sp-label" x="180" y="387">Block E</text>
+                <text class="sp-label" x="375" y="387">Block F</text>
+                <text class="sp-label" x="645" y="387">Block G</text>
+                <text class="sp-label" x="835" y="387">Block H</text>
+                <text class="sp-label sp-label--amenity" x="190" y="296">Play area</text>
+                <text class="sp-label sp-label--amenity" x="400" y="296">Pool deck</text>
+                <text class="sp-label sp-label--amenity" x="640" y="296">Clubhouse</text>
+                <text class="sp-label sp-label--amenity" x="830" y="296">Courts</text>
+                <text class="sp-label sp-label--amenity" x="525" y="505">Main gate</text>
 
-              <!-- Nodes -->
-              <g>
-                <circle class="sp-ping" cx="40" cy="56" r="14"/>
-                <circle class="sp-node" cx="40" cy="56" r="4.5"/>
-                <circle class="sp-node-core" cx="40" cy="56" r="1.8"/>
-              </g>
-              <g>
-                <circle class="sp-ping sp-ping--b" cx="288" cy="40" r="14"/>
-                <circle class="sp-node" cx="288" cy="40" r="4.5"/>
-                <circle class="sp-node-core" cx="288" cy="40" r="1.8"/>
-              </g>
-              <g>
-                <circle class="sp-ping sp-ping--c" cx="160" cy="196" r="14"/>
-                <circle class="sp-node" cx="160" cy="196" r="4.5"/>
-                <circle class="sp-node-core" cx="160" cy="196" r="1.8"/>
-              </g>
-              <circle class="sp-node" cx="88" cy="120" r="3.5"/>
-              <circle class="sp-node" cx="234" cy="120" r="3.5"/>
-
-              <!-- Gate -->
-              <path class="sp-structure" d="M138 150h44"/>
-              <path class="sp-beam" d="M140 150l38-12"/>
-
-              <!-- Labels -->
-              <text class="sp-label" x="18" y="30">Perimeter</text>
-              <text class="sp-label" x="190" y="136">Warehouse</text>
-              <text class="sp-label" x="50" y="136">Office</text>
-              <text class="sp-label" x="188" y="166">Main gate</text>
-            </svg>
+                <g data-units></g>
+              </svg>
+            </div>
           </div>
 
           <div class="console__side">
@@ -437,7 +718,7 @@
           <h3>Video intelligence</h3>
           <p>
             Every camera gets a description, not just a motion box. People,
-            vehicles, packages, loitering, tailgating, crowding, fallen persons,
+            vehicles, packages, loitering, unattended bags, crowding, fallen persons,
             open doors — recognised in context and searchable in plain English.
           </p>
         </article>

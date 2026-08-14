@@ -1,0 +1,272 @@
+/* ==========================================================================
+   mySecurity — Site plan
+   The live-site overlay in the home page console: block labels, camera
+   coverage arcs, and tracked subjects moving through the property.
+
+   HOW IT IS BUILT
+   The base is a top-down plan image. Everything on top of it is one inline
+   SVG sharing the image's aspect ratio, so a single viewBox gives every
+   overlay element a coordinate system that scales with the plan and needs no
+   per-breakpoint arithmetic. Positions below are in those viewBox units
+   (1000 x 573), not pixels.
+
+   WHAT LIVES WHERE
+   The camera sweeps are CSS keyframes — they are the same loop on every
+   camera, so there is nothing to compute. Everything that moves through the
+   estate is placed by site-plan.js, because subjects spawn and despawn and
+   their number is not known at author time. This file styles them; it does
+   not position them.
+   ========================================================================== */
+
+.siteplan-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1659 / 951;      /* matches society-top.png */
+  overflow: hidden;
+  border-radius: var(--r-sm);
+}
+
+.siteplan-stage__plan {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The plan is drawn in near-white on near-black. Knocking it back stops it
+     competing with the overlay, which is the part carrying the meaning. */
+  opacity: 0.5;
+  filter: contrast(1.1);
+}
+
+[data-theme="light"] .siteplan-stage__plan {
+  opacity: 0.85;
+  filter: invert(1) contrast(0.9);
+}
+
+.siteplan-stage__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Block labels
+   -------------------------------------------------------------------------- */
+
+.sp-label {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 1.4px;
+  fill: var(--muted);
+  text-transform: uppercase;
+  text-anchor: middle;
+}
+
+.sp-label--amenity { fill: var(--faint); font-size: 13px; }
+
+/* --------------------------------------------------------------------------
+   Cameras
+   site-plan.js writes the rotation on .sp-cam__pan every frame, because it
+   needs to know where each camera points in order to decide what is visible.
+   The keyframe below is only the no-JS fallback; .js-plan switches it off.
+   -------------------------------------------------------------------------- */
+
+.sp-node { fill: var(--bg); stroke: var(--accent); stroke-width: 1.6; }
+.sp-node-core { fill: var(--accent); }
+
+.sp-cone {
+  /* Fades to nothing at the far edge, so coverage falls off instead of
+     ending on a hard arc. */
+  fill: url(#sp-fade);
+}
+
+.sp-cam__pan { animation: sp-sweep 9s ease-in-out infinite alternate; }
+.js-plan .sp-cam__pan { animation: none; }
+
+@keyframes sp-sweep {
+  from { transform: rotate(-22deg); }
+  to   { transform: rotate(22deg); }
+}
+
+/* A camera that has something in frame. Amber is "worth a look", red is
+   "acting on it" — the same split the event stream uses. */
+.sp-cam.is-suspicious .sp-cone { fill: url(#sp-fade-warn); }
+.sp-cam.is-critical   .sp-cone { fill: url(#sp-fade-crit); }
+.sp-cam.is-suspicious .sp-node { stroke: #E9B949; }
+.sp-cam.is-critical   .sp-node { stroke: #FF3B30; }
+.sp-cam.is-suspicious .sp-node-core { fill: #E9B949; }
+.sp-cam.is-critical   .sp-node-core { fill: #FF3B30; }
+
+/* The alert over the camera that spotted it. Same overshoot-and-settle as the
+   hero: a linear fade reads as a tooltip, a snap reads as alarm. */
+.sp-cam__bang {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  text-anchor: middle;
+  fill: #E9B949;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.sp-cam.is-critical .sp-cam__bang { fill: #FF3B30; }
+
+.sp-cam.is-suspicious .sp-cam__bang,
+.sp-cam.is-critical .sp-cam__bang {
+  animation: sp-bang 460ms var(--ease-out) forwards;
+}
+
+@keyframes sp-bang {
+  0%   { opacity: 0; transform: scale(0.4) translateY(6px); }
+  55%  { opacity: 1; transform: scale(1.3) translateY(0); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* --------------------------------------------------------------------------
+   Subjects
+   Each is a <g> that site-plan.js translates each frame. The dot, its lock-on
+   box and its label all live inside, so the annotation follows for free.
+   -------------------------------------------------------------------------- */
+
+.sp-unit__dot { fill: var(--accent); stroke: var(--bg); stroke-width: 1.2; }
+.sp-unit--ambient .sp-unit__dot { r: 2.4; opacity: 0.7; }
+
+/* Generous invisible hit area — a 3px dot is not hoverable. */
+.sp-unit__hit { fill: transparent; pointer-events: auto; }
+
+/* Routine subjects are just dots. Annotating every one of them in a busy
+   estate is noise, and a real console doesn't do it either — you get the box
+   when you ask for it by pointing at it, or when the system needs you to look. */
+.sp-unit__box,
+.sp-unit__tagbg,
+.sp-unit__tag {
+  opacity: 0;
+  transition: opacity 160ms var(--ease);
+}
+
+.sp-unit:hover .sp-unit__box,
+.sp-unit.is-flagged .sp-unit__box   { opacity: 0.8; }
+.sp-unit:hover .sp-unit__tagbg,
+.sp-unit.is-flagged .sp-unit__tagbg { opacity: 0.92; }
+.sp-unit:hover .sp-unit__tag,
+.sp-unit.is-flagged .sp-unit__tag   { opacity: 1; }
+
+.sp-unit__box { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+.sp-unit__tagbg { fill: var(--accent); }
+
+.sp-unit__tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.4px;
+  fill: #06130E;
+  text-transform: uppercase;
+}
+
+/* Outside every camera's coverage there is nothing to draw: the console can
+   only show what something is actually watching. */
+.sp-unit {
+  opacity: 1;
+  transition: opacity 260ms var(--ease);
+}
+
+.sp-unit.is-unseen { opacity: 0; }
+
+/* ---- flagged ------------------------------------------------------------ */
+
+.sp-unit.is-suspicious { --flag: #E9B949; }
+.sp-unit.is-critical   { --flag: #FF3B30; }
+
+.sp-unit.is-flagged .sp-unit__dot   { fill: var(--flag); }
+.sp-unit.is-flagged .sp-unit__tagbg { fill: var(--flag); }
+.sp-unit.is-flagged .sp-unit__box   { stroke: var(--flag); animation: sp-flag 1.1s steps(1, end) infinite; }
+.sp-unit.is-critical .sp-unit__box  { stroke-width: 1.8; animation-duration: 0.6s; }
+.sp-unit.is-flagged .sp-unit__ping  { stroke: var(--flag); }
+
+@keyframes sp-flag {
+  0%, 60%  { opacity: 1; }
+  61%,100% { opacity: 0.3; }
+}
+
+.sp-unit__ping {
+  fill: none;
+  stroke: var(--flag, #E9B949);
+  stroke-width: 1.6;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.sp-unit.is-flagged .sp-unit__ping { animation: sp-ping 1.6s var(--ease-out) infinite; }
+
+@keyframes sp-ping {
+  0%   { opacity: 0.75; transform: scale(0.3); }
+  70%  { opacity: 0;    transform: scale(2.2); }
+  100% { opacity: 0;    transform: scale(2.2); }
+}
+
+/* --------------------------------------------------------------------------
+   Idle + reduced motion
+   -------------------------------------------------------------------------- */
+
+[data-siteplan].is-idle .sp-cam__pan,
+[data-siteplan].is-idle .sp-unit__box,
+[data-siteplan].is-idle .sp-unit__ping,
+[data-siteplan].is-idle .sp-cam__bang {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-cam__pan,
+  .sp-unit__box,
+  .sp-unit__ping,
+  .sp-cam__bang {
+    animation: none;
+  }
+
+  /* site-plan.js places a still, populated site in this case rather than
+     leaving an empty one. */
+}
+
+@media (max-width: 760px) {
+  /* The annotations become unreadable well before the plan does. */
+  .sp-unit__box,
+  .sp-unit__tagbg,
+  .sp-unit__tag { display: none; }
+
+  .sp-label { font-size: 19px; }
+}
+
+/* --------------------------------------------------------------------------
+   Event stream severity
+   The feed component ships with one alert level. Incidents raised by the plan
+   carry three, and they have to be tellable apart at a glance: amber for
+   something worth a look, red for something being acted on.
+   -------------------------------------------------------------------------- */
+
+.feed__item[data-level="suspicious"] .feed__glyph {
+  background-color: rgba(233, 185, 73, 0.14);
+  border-color: rgba(233, 185, 73, 0.4);
+  color: #E9B949;
+}
+
+.feed__item[data-level="critical"] .feed__glyph {
+  background-color: rgba(255, 59, 48, 0.16);
+  border-color: rgba(255, 59, 48, 0.45);
+  color: #FF3B30;
+}
+
+.feed__item[data-level="critical"] .feed__title { color: #FF6A61; }
+
+/* The whole entry is outlined, so severity is legible from the shape of the
+   row and not only from the glyph colour. */
+.feed__item[data-level="suspicious"] {
+  border-color: rgba(233, 185, 73, 0.55);
+  background-color: rgba(233, 185, 73, 0.05);
+}
+
+.feed__item[data-level="critical"] {
+  border-color: rgba(255, 59, 48, 0.6);
+  background-color: rgba(255, 59, 48, 0.06);
+}
