@@ -104,8 +104,13 @@
   --cycle: 8.4s;
   --servo: cubic-bezier(0.62, 0.02, 0.34, 1);
 
-  /* Text brightness floor. The copy is NEVER hidden and never animates from
-     zero — it is legible on its own at rest, and the cone lifts it. */
+  /* The colour of the light: the cone, its bloom, the alert, and the wedge it
+     casts on the headline. It follows the tracker's verdict, because a green
+     beam lighting an amber verdict is the camera disagreeing with the console. */
+  --beam-color: var(--accent);
+  --beam-glow: var(--accent-glow);
+  transition: --beam-color 260ms var(--ease);
+
   /* Text floor. High enough to stay comfortably legible unlit, and high enough
      that color-dodge has headroom to work with — dodge does almost nothing to
      near-black pixels, so dimming too far kills the effect it is meant to
@@ -121,6 +126,15 @@
 
   /* Drives the beam rotation AND the headline wedge from one clock. */
   animation: hero-sweep var(--cycle) var(--servo) infinite;
+}
+
+/* Registered as a real <color> so it interpolates. An unregistered custom
+   property would snap, and a hard colour jump mid-sweep reads as a glitch
+   rather than as the system changing its mind. */
+@property --beam-color {
+  syntax: "<color>";
+  initial-value: #00B074;
+  inherits: true;
 }
 
 /* Registering --sweep as an <angle> is what makes it interpolate instead of
@@ -211,10 +225,10 @@
   font-style: normal;
   font-weight: 700;
   line-height: 1;
-  color: var(--accent);
+  color: var(--beam-color);
   text-shadow:
-    0 0 10px var(--accent-glow),
-    0 0 26px var(--accent-glow),
+    0 0 10px var(--beam-glow),
+    0 0 26px var(--beam-glow),
     0 2px 0 rgba(0, 0, 0, 0.45);
   opacity: 0;
 }
@@ -268,6 +282,15 @@
 
 .hero--lab .hero__inner { position: relative; z-index: 2; }
 
+/* The headline has to land as two lines — the observation, then the answer.
+   At the shared 16ch it broke to three, which strands "AI can." on a line of
+   its own and buries the turn. The measured need is about 1100px at this type
+   size, so the column is widened for the headline only; the lead keeps its own
+   58ch reading width below, and the clamp on the type size takes care of
+   narrower screens where three lines are correct anyway. */
+.hero--lab .hero__inner { max-width: 1120px; }
+.hero--lab .hero__title { max-width: none; }
+
 .hero--lab .hero__title { color: var(--copy-dim); }
 .hero--lab .hero__lead  { color: var(--lead-dim); }
 .hero--lab .hero__note  { color: color-mix(in srgb, var(--faint) 82%, var(--bg)); }
@@ -292,7 +315,7 @@
     color-mix(in srgb, var(--display) 20%, transparent) 6deg,
     color-mix(in srgb, var(--display) 70%, transparent) 12deg,
     var(--display) 17deg,
-    color-mix(in srgb, var(--accent) 45%, var(--display)) 21deg,
+    color-mix(in srgb, var(--beam-color) 45%, var(--display)) 21deg,
     color-mix(in srgb, var(--display) 55%, transparent) 27deg,
     transparent 34deg
   );
@@ -358,7 +381,7 @@
     color-mix(in srgb, var(--display) 25%, transparent) 6deg,
     color-mix(in srgb, var(--display) 75%, transparent) 12deg,
     var(--display) 17deg,
-    color-mix(in srgb, var(--accent) 55%, var(--display)) 21deg,
+    color-mix(in srgb, var(--beam-color) 55%, var(--display)) 21deg,
     color-mix(in srgb, var(--display) 60%, transparent) 27deg,
     transparent 34deg
   );
@@ -397,6 +420,14 @@
 /* Amber for a subject losing interest. Off-palette on purpose: the accent
    means "good" everywhere else on the site, so a warning cannot also be it. */
 .tracker[data-state="loiter"] { --track: #E9B949; }
+
+/* The cone and the alert take the verdict's colour. Driven by :has() rather
+   than a second JS write, because the state already lives on the tracker and
+   duplicating it just creates something that can disagree. */
+.hero--lab:has(.tracker.is-on[data-state="loiter"]) {
+  --beam-color: #E9B949;
+  --beam-glow: rgba(233, 185, 73, 0.32);
+}
 
 .tracker__box {
   position: absolute;
@@ -539,8 +570,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--accent) 70%, white) 0%,
-    color-mix(in srgb, var(--accent) 30%, transparent) 22%,
+    color-mix(in srgb, var(--beam-color) 70%, white) 0%,
+    color-mix(in srgb, var(--beam-color) 30%, transparent) 22%,
     transparent 62%
   );
   opacity: 0.16;
@@ -552,8 +583,8 @@
   clip-path: polygon(0 49.7%, 0 50.3%, 100% 80%, 100% 20%);
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--accent) 34%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 9%, transparent) 30%,
+    color-mix(in srgb, var(--beam-color) 34%, transparent) 0%,
+    color-mix(in srgb, var(--beam-color) 9%, transparent) 30%,
     transparent 64%
   );
   opacity: 0.6;
@@ -564,12 +595,12 @@
   clip-path: polygon(0 49.85%, 0 50.15%, 100% 66%, 100% 34%);
   background:
     radial-gradient(220px 180px at 0% 50%,
-      color-mix(in srgb, var(--accent) 85%, white) 0%,
+      color-mix(in srgb, var(--beam-color) 85%, white) 0%,
       transparent 70%),
     linear-gradient(
       90deg,
-      color-mix(in srgb, var(--accent) 70%, transparent) 0%,
-      color-mix(in srgb, var(--accent) 18%, transparent) 34%,
+      color-mix(in srgb, var(--beam-color) 70%, transparent) 0%,
+      color-mix(in srgb, var(--beam-color) 18%, transparent) 34%,
       transparent 68%
     );
   opacity: 0.9;
@@ -594,8 +625,8 @@
 [data-theme="light"] .hero__beam-spill {
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--accent) 30%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 10%, transparent) 34%,
+    color-mix(in srgb, var(--beam-color) 30%, transparent) 0%,
+    color-mix(in srgb, var(--beam-color) 10%, transparent) 34%,
     transparent 78%
   );
   opacity: 0.5;
@@ -604,8 +635,8 @@
 [data-theme="light"] .hero__beam-core {
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--accent) 52%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 16%, transparent) 40%,
+    color-mix(in srgb, var(--beam-color) 52%, transparent) 0%,
+    color-mix(in srgb, var(--beam-color) 16%, transparent) 40%,
     transparent 82%
   );
   opacity: 0.6;

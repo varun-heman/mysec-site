@@ -272,12 +272,14 @@
           Now monitoring 1,200+ sites
         </span>
 
-        <h1 class="hero__title" data-lit>One AI watching every camera, gate and door.</h1>
+        <h1 class="hero__title" data-lit>Your guards can’t be everywhere at once. AI can.</h1>
 
         <p class="hero__lead" data-lit>
-          mySecurity turns the equipment you already own into a single security
-          system that thinks. It sees what matters, decides what to do, and acts
-          in seconds — across homes, campuses, warehouses and offices.
+          A guard on the gate is handling dozens of visitors, deliveries and
+          vehicles a day. Doing that leaves very little attention for actually
+          watching the place. mySecurity takes over the access control and only
+          calls a guard when something genuinely needs them — and tells them
+          where to go.
         </p>
 
         <div class="hero__actions">
@@ -288,7 +290,7 @@
           <a class="btn btn--secondary btn--lg" href="platform.html" data-lit-glow>See how it works</a>
         </div>
 
-        <p class="hero__note" data-lit>Works with existing CCTV · No rip-and-replace · Live in days</p>
+        <p class="hero__note" data-lit>Works with your existing CCTV and myGate · Host on-premise or in the cloud · Live in days</p>
       </div>
     </div>
 
@@ -676,20 +678,20 @@
     <div class="wrap">
       <div class="stats" data-reveal-group>
         <div class="stat">
-          <span class="stat__value"><span data-count="92" data-count-suffix="%">92%</span></span>
-          <span class="stat__label">Fewer false alarms than motion-only CCTV alerting</span>
+          <span class="stat__value">24<span class="accent">/7</span></span>
+          <span class="stat__label">Every camera watched, every hour, with nobody sat at a screen</span>
         </div>
         <div class="stat">
           <span class="stat__value"><span data-count="1.8" data-count-suffix="s">1.8s</span></span>
-          <span class="stat__label">Median time from detection to a verified, routed alert</span>
+          <span class="stat__label">From something happening to an alert in the right person’s hand</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value"><span data-count="18" data-count-suffix=" days">18 days</span></span>
+          <span class="stat__label">Typical time a failed camera goes unnoticed on an unwatched site</span>
         </div>
         <div class="stat">
           <span class="stat__value"><span data-count="40" data-count-suffix="+">40+</span></span>
-          <span class="stat__label">Camera, gate, reader and sensor families supported</span>
-        </div>
-        <div class="stat">
-          <span class="stat__value">24<span class="accent">/7</span></span>
-          <span class="stat__label">Unattended cover, with human escalation when it counts</span>
+          <span class="stat__label">Camera, gate, reader and sensor families it already speaks to</span>
         </div>
       </div>
     </div>
@@ -702,11 +704,12 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">One system</span>
-        <h2>Everything on site, under one intelligence.</h2>
+        <h2>It notices the things people miss.</h2>
         <p>
-          Most properties run five disconnected systems and a WhatsApp group.
-          mySecurity puts cameras, access control, visitors, assets and
-          emergencies behind a single brain — and a single screen.
+          Cameras, gates, visitors, equipment and emergencies are usually five
+          separate systems and a WhatsApp group. Watched together, an alert
+          arrives with the context already attached — and with far fewer of
+          them, because most of what moves on a site is perfectly normal.
         </p>
       </div>
 
@@ -715,9 +718,10 @@
           <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-camera"></use></svg></span>
           <h3>Video intelligence</h3>
           <p>
-            Every camera gets a description, not just a motion box. People,
-            vehicles, packages, loitering, unattended bags, crowding, fallen persons,
-            open doors — recognised in context and searchable in plain English.
+            Motion alerts fire at cats and headlights. This reads the scene: a
+            bag left behind, someone at a door far too long, a crowd building,
+            a person on the ground, a shutter still open at midnight.
+            Exceptions worth your attention, not everything that moves.
           </p>
         </article>
 
@@ -733,17 +737,18 @@
 
         <article class="card card--feature">
           <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-badge"></use></svg></span>
-          <h3>Visitors &amp; guests</h3>
+          <h3>Visitors &amp; deliveries</h3>
           <p>
-            Pre-authorised passes, QR check-in, ID capture and automatic host
-            notification. Every entry and exit is logged with a face, a time and
-            a reason — and expiring passes close themselves.
+            The delivery queue is what eats a guard’s day. Riders check
+            themselves in, hosts are notified automatically, and passes expire
+            on their own — so the register keeps itself and the gate stays
+            moving.
           </p>
         </article>
 
         <article class="card card--feature">
           <span class="card__icon"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-asset"></use></svg></span>
-          <h3>Asset &amp; environment monitoring</h3>
+          <h3>Equipment &amp; environment health</h3>
           <p>
             Watch the things that quietly cost you money: cold-chain
             temperature, generator fuel, pump rooms, high-value stock, server
@@ -775,6 +780,104 @@
   </section>
 
   <!-- ==================================================================
+       Alerts on WhatsApp
+       ================================================================== -->
+  <section class="section" id="notify">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <span class="eyebrow">Where it reaches people</span>
+        <h2>One alert, worded for whoever's reading it.</h2>
+        <p>
+          A guard needs a location and what to do about it. The secretary
+          needs the pattern. A resident just needs to know who's at the
+          gate. Same event, three different messages — on WhatsApp,
+          because that's what everyone already has open.
+        </p>
+      </div>
+
+      <div class="notify" data-tabs data-reveal>
+        <div class="tabs__list" role="tablist" aria-label="Who receives this">
+          <button class="tabs__tab" role="tab" id="tab-guard" aria-controls="p-guard" aria-selected="true" type="button">Guard</button>
+          <button class="tabs__tab" role="tab" id="tab-secretary" aria-controls="p-secretary" aria-selected="false" type="button">Society secretary</button>
+          <button class="tabs__tab" role="tab" id="tab-resident" aria-controls="p-resident" aria-selected="false" type="button">Resident</button>
+        </div>
+
+        <div class="phone">
+          <div class="phone__frame">
+            <div class="phone__notch"></div>
+            <div class="phone__screen">
+              <div class="wa__bar">
+                <span>9:41</span>
+                <span class="wa__battery" aria-hidden="true"></span>
+              </div>
+
+              <div class="wa__header">
+                <span class="wa__avatar"><svg aria-hidden="true"><use href="assets/img/icons.svg#icon-shield"></use></svg></span>
+                <span class="wa__who">
+                  <strong>mySecurity Alerts</strong>
+                  <em>WhatsApp</em>
+                </span>
+              </div>
+
+              <div class="wa__thread" role="tabpanel" id="p-guard" aria-labelledby="tab-guard">
+                <span class="wa__day">Today</span>
+                <div class="wa__msg wa__msg--critical">
+                  <p>🔴 <strong>Gate 2, loading dock</strong> — person on the ground, not moving. Camera 14. Go now.</p>
+                  <span class="wa__time-stamp">9:41 pm</span>
+                </div>
+                <div class="wa__msg wa__msg--warn">
+                  <p>🟡 Block C stairwell — same visitor waiting 12 min, not badged in. Worth a look when you're free.</p>
+                  <span class="wa__time-stamp">8:15 pm</span>
+                </div>
+                <div class="wa__msg">
+                  <p>Camera 9, basement ramp, offline 20 min. Facilities notified — no action needed from you.</p>
+                  <span class="wa__time-stamp">7:02 pm</span>
+                </div>
+              </div>
+
+              <div class="wa__thread" role="tabpanel" id="p-secretary" aria-labelledby="tab-secretary" hidden>
+                <span class="wa__day">Today</span>
+                <div class="wa__msg">
+                  <p><strong>Weekly summary</strong> — 6 alerts raised, 6 resolved, 0 still open. Full report attached.</p>
+                  <span class="wa__time-stamp">6:00 pm</span>
+                </div>
+                <div class="wa__msg wa__msg--warn">
+                  <p>🟡 Camera 9, basement ramp, has been offline 18 hrs. Vendor ticket #4021 raised automatically.</p>
+                  <span class="wa__time-stamp">11:20 am</span>
+                </div>
+                <div class="wa__msg">
+                  <p>Face recognition is off for every zone, same as the AGM decision. Nothing to action.</p>
+                  <span class="wa__time-stamp">9:05 am</span>
+                </div>
+              </div>
+
+              <div class="wa__thread" role="tabpanel" id="p-resident" aria-labelledby="tab-resident" hidden>
+                <span class="wa__day">Today</span>
+                <div class="wa__msg">
+                  <p>Your guest <strong>Rohan Mehta</strong> is at the main gate.</p>
+                  <div class="wa__actions">
+                    <button type="button">Let them in</button>
+                    <button type="button">Not expecting them</button>
+                  </div>
+                  <span class="wa__time-stamp">4:52 pm</span>
+                </div>
+                <div class="wa__msg">
+                  <p>Your delivery is at Gate 2. Handover OTP: <strong>4821</strong></p>
+                  <span class="wa__time-stamp">1:18 pm</span>
+                </div>
+                <div class="wa__msg">
+                  <p>A package was left at your door at 11:40 am while you were out.</p>
+                  <span class="wa__time-stamp">11:41 am</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
        How it works
        ================================================================== -->
   <section class="section" id="how">
@@ -782,7 +885,7 @@
       <div class="section-head section-head--split">
         <div class="stack">
           <span class="eyebrow">How it works</span>
-          <h2>Connect. Understand. Decide. Act.</h2>
+          <h2>Monitor. Detect. Decide. Act. Learn.</h2>
         </div>
         <a class="link-arrow" href="platform.html">
           Read the platform detail
@@ -793,21 +896,20 @@
       <div class="steps" data-reveal-group data-reveal-step="80">
         <article class="step">
           <span class="step-index">Step 01</span>
-          <h3>Connect</h3>
+          <h3>Monitor</h3>
           <p>
-            An on-site edge appliance discovers your existing cameras over
-            ONVIF/RTSP and speaks to your gate, reader and alarm hardware.
-            Nothing gets ripped out.
+            Every camera, gate and sensor on site, watched continuously —
+            not reviewed hours after something's gone wrong.
           </p>
         </article>
 
         <article class="step">
           <span class="step-index">Step 02</span>
-          <h3>Understand</h3>
+          <h3>Detect</h3>
           <p>
-            Vision and sensor models build a continuous description of the site:
-            who is here, what moved, what is open, what is out of range — and
-            what counts as normal for this place.
+            The system learns what a normal day looks like here, so it
+            notices the delivery that isn't one, the door left open too
+            long.
           </p>
         </article>
 
@@ -815,9 +917,8 @@
           <span class="step-index">Step 03</span>
           <h3>Decide</h3>
           <p>
-            Your rules and escalation ladder run against that understanding.
-            Routine things are handled silently. Anything ambiguous is verified
-            before a human is disturbed.
+            Not everything unusual needs a guard. Each event is checked
+            against what's normal here and routed only when it matters.
           </p>
         </article>
 
@@ -825,9 +926,18 @@
           <span class="step-index">Step 04</span>
           <h3>Act</h3>
           <p>
-            Open the gate, lock the door, sound a zone, call the guard, notify
-            the owner, dispatch a responder — and record every step as a
-            time-stamped, exportable trail.
+            Open the gate, lock the door, sound a zone, call the guard,
+            notify the owner — through whichever channel reaches them.
+          </p>
+        </article>
+
+        <article class="step">
+          <span class="step-index">Step 05</span>
+          <h3>Learn</h3>
+          <p>
+            Every incident feeds back in. False alarms get rarer, and the
+            committee sees what keeps happening, so it gets fixed at the
+            source.
           </p>
         </article>
       </div>
@@ -841,7 +951,7 @@
     <div class="wrap">
       <div class="section-head section-head--center">
         <span class="eyebrow">Built for both</span>
-        <h2>The same brain, tuned to your property.</h2>
+        <h2>The same system, tuned to your property.</h2>
         <p>
           A four-camera home and a twelve-building industrial estate need very
           different defaults. Both get the same engine.
@@ -862,7 +972,7 @@
             <li>Automatic gate entry for known vehicles and expected deliveries</li>
             <li>Guest passes you can send from your phone</li>
             <li>Child, elderly and pet safety zones around pools and driveways</li>
-            <li>Society-wide dashboards for RWAs and facility managers</li>
+            <li>Monthly report the committee can take straight to the general body</li>
           </ul>
           <a class="link-arrow" href="residential.html">
             Explore residential
@@ -958,17 +1068,17 @@
       <div class="split">
         <div class="stack-6" data-reveal>
           <span class="eyebrow">Privacy &amp; control</span>
-          <h2>Your footage stays yours.</h2>
+          <h2>Every camera watches. Every look is logged.</h2>
           <p class="text-muted text-lead">
             A security system that leaks is not a security system. Recognition
             runs on the edge appliance inside your building; only events,
             not continuous video, ever need to leave the site.
           </p>
           <ul class="ticks">
-            <li><strong class="text-display">Edge-first processing.</strong> Video is analysed locally. Cloud is for coordination, not surveillance.</li>
+            <li><strong class="text-display">Nothing leaves the building.</strong> Video is analysed on site. The cloud coordinates alerts; it never holds your footage.</li>
             <li><strong class="text-display">Encrypted end to end.</strong> TLS in transit, AES-256 at rest, per-site key isolation.</li>
-            <li><strong class="text-display">Role-based access.</strong> Guards, managers, owners and auditors each see only their slice.</li>
-            <li><strong class="text-display">Full audit trail.</strong> Every view, export, override and door-open is attributed and immutable.</li>
+            <li><strong class="text-display">Recognition is opt-in, zone by zone.</strong> Off by default. A committee decides where, and can turn it off again.</li>
+            <li><strong class="text-display">Every view is logged.</strong> Including ours. Residents can be shown who looked at what, and when.</li>
             <li><strong class="text-display">Data residency you choose.</strong> Keep records in-country, or entirely on-premise.</li>
           </ul>
         </div>
@@ -1007,12 +1117,13 @@
       <figure class="quote" data-reveal>
         <span class="eyebrow">Customer</span>
         <blockquote>
-          “We went from four guards staring at a wall of monitors to one
-          supervisor handling exceptions. The night shift finally sees the
-          things it was always supposed to catch.”
+          “Our guards were spending the morning on the delivery register, not
+          on the gate. Now the register keeps itself and they’re actually
+          watching the place. The first thing it caught was a camera that had
+          been dead for a month.”
         </blockquote>
         <figcaption>
-          <strong>Facilities lead</strong> — 9-building logistics park, 260 cameras
+          <strong>Managing committee member</strong> — 640-home gated community
         </figcaption>
       </figure>
     </div>
@@ -1088,16 +1199,19 @@
           <h3>
             <button class="accordion__trigger" type="button" data-accordion-trigger
                     aria-expanded="false" aria-controls="faq-4" id="faq-4-t">
-              Does it replace our guards?
+              What do we tell residents about privacy?
               <span class="accordion__icon" aria-hidden="true"></span>
             </button>
           </h3>
           <div class="accordion__panel" id="faq-4" role="region" aria-labelledby="faq-4-t">
             <div>
-              It replaces the part of the job humans are worst at — watching a
-              quiet screen for eight hours. Guards move from passive monitoring to
-              responding to verified, pre-triaged events. Most customers keep the
-              same team and cover far more ground with it.
+              That every camera watches, but nothing about them is kept beyond
+              what's needed. Footage is analysed on the appliance in the
+              building. Face recognition is off unless the committee turns it
+              on for a specific zone, and every single view of footage is
+              logged — including ours. Most societies
+              put this in the AGM notice, and it is usually what gets the
+              proposal approved rather than what holds it up.
             </div>
           </div>
         </div>
@@ -1106,16 +1220,17 @@
           <h3>
             <button class="accordion__trigger" type="button" data-accordion-trigger
                     aria-expanded="false" aria-controls="faq-5" id="faq-5-t">
-              Who can see our video?
+              Does it replace our guards?
               <span class="accordion__icon" aria-hidden="true"></span>
             </button>
           </h3>
           <div class="accordion__panel" id="faq-5" role="region" aria-labelledby="faq-5-t">
             <div>
-              Only the people you name, under the roles you assign. mySecurity
-              staff have no standing access to customer footage; support access is
-              time-boxed, requires your approval, and is written to the same audit
-              log you can read.
+              No — it gives them their job back. Nobody can usefully watch forty
+              screens for eight hours; that part is arithmetic, not effort. The
+              guards stop doing data entry at the gate and start responding to
+              things that have already been checked. Most societies keep the same
+              team and cover far more ground with them.
             </div>
           </div>
         </div>
@@ -1130,7 +1245,7 @@
     <div class="wrap">
       <div class="cta" data-reveal>
         <span class="eyebrow">Get started</span>
-        <h2>See your own site running on mySecurity.</h2>
+        <h2>Start with one question: how long has camera 7 been down?</h2>
         <p>
           Send us a floor plan or a camera list and we'll come back with a
           coverage map, a device compatibility report and a realistic timeline.

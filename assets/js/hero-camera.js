@@ -282,6 +282,11 @@
 
     var NEAR_IN = 135;       // px — cross this inward to become "interested"
     var NEAR_OUT = 172;      // px — cross this outward to fall back
+    /* Closer than this to a control and the annotation gets out of the way. A
+       box sitting on a button you are reaching for is in the way, not
+       informative — and the reading is already made by then. Measured to the
+       button's edge, so it clears from every side. */
+    var CLEAR_OF_CTA = 58;
     var tracker = hero.querySelector("[data-tracker]");
     var trackerLabel = hero.querySelector("[data-tracker-label]");
     var ctas = hero.querySelectorAll(".hero__actions .btn");
@@ -295,6 +300,8 @@
       for (var c = 0; c < ctas.length; c++) {
         d = Math.min(d, distToRect(px, py, ctas[c].getBoundingClientRect()));
       }
+
+      tracker.classList.toggle("is-on", d > CLEAR_OF_CTA);
 
       /* Hysteresis: the threshold to become interested is tighter than the one
          to stop being interested, so hovering right on the boundary does not
@@ -330,8 +337,7 @@
       );
 
       placeTracker();
-      classify(trackerX, trackerY);
-      tracker.classList.add("is-on");
+      classify(trackerX, trackerY);   // decides visibility too
     }
 
     var trackerX = 0, trackerY = 0;
