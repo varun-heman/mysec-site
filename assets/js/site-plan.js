@@ -47,18 +47,18 @@
      previously moving at half a car's speed, which is what made them look
      like they were skating over the estate. */
   var ROUTES = [
-    { kind:"vehicle", speed:62, pts:[GATE_OUT,[V2,R_B],[V1,R_B],[V1,H_S],[V1,H_N],[V1,R_T],[R_L,R_T],[R_L,R_B],[V2,R_B],GATE_OUT] },
-    { kind:"vehicle", speed:58, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V3,H_S],[V3,H_N],[V3,R_T],[R_R,R_T],[R_R,R_B],[V2,R_B],GATE_OUT] },
-    { kind:"vehicle", speed:68, pts:[GATE_OUT,[V2,R_B],[R_R,R_B],[R_R,R_T],[R_L,R_T],[R_L,R_B],[V2,R_B],GATE_OUT] },
-    { kind:"vehicle", speed:55, pts:[GATE_OUT,[V2,R_B],[V2,H_N],[V1,H_N],[V1,H_S],[V2,H_S],[V2,R_B],GATE_OUT] },
-    { kind:"vehicle", speed:60, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V1,H_S],[V1,R_B],[V2,R_B],GATE_OUT] },
-    { kind:"person",  speed:15, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[400,H_S],[400,286]] },
-    { kind:"person",  speed:14, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V1,H_S],[V1,H_N],[190,H_N],[190,240]] },
-    { kind:"person",  speed:16, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V3,H_S],[830,H_S],[830,286]] },
-    { kind:"person",  speed:13, pts:[GATE_OUT,[V2,R_B],[V2,H_N],[R_R,H_N],[R_R,R_B],[V2,R_B],GATE_OUT] },
-    { kind:"person",  speed:15, pts:[GATE_OUT,[V2,R_B],[V1,R_B],[V1,H_N],[R_L,H_N],[R_L,R_B],[V2,R_B],GATE_OUT] },
-    { kind:"person",  speed:14, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V3,H_S],[V3,H_N],[640,H_N],[640,282]] },
-    { kind:"person",  speed:16, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V2,H_N],[V2,R_T],[R_L,R_T],[R_L,H_N],[V1,H_N],[V1,H_S],[V2,H_S],[V2,R_B],GATE_OUT] }
+    { kind:"vehicle", speed:20, pts:[GATE_OUT,[V2,R_B],[V1,R_B],[V1,H_S],[V1,H_N],[V1,R_T],[R_L,R_T],[R_L,R_B],[V2,R_B],GATE_OUT] },
+    { kind:"vehicle", speed:19, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V3,H_S],[V3,H_N],[V3,R_T],[R_R,R_T],[R_R,R_B],[V2,R_B],GATE_OUT] },
+    { kind:"vehicle", speed:22, pts:[GATE_OUT,[V2,R_B],[R_R,R_B],[R_R,R_T],[R_L,R_T],[R_L,R_B],[V2,R_B],GATE_OUT] },
+    { kind:"vehicle", speed:18, pts:[GATE_OUT,[V2,R_B],[V2,H_N],[V1,H_N],[V1,H_S],[V2,H_S],[V2,R_B],GATE_OUT] },
+    { kind:"vehicle", speed:19, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V1,H_S],[V1,R_B],[V2,R_B],GATE_OUT] },
+    { kind:"person",  speed:5, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[400,H_S],[400,286]] },
+    { kind:"person",  speed:4, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V1,H_S],[V1,H_N],[190,H_N],[190,240]] },
+    { kind:"person",  speed:5, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V3,H_S],[830,H_S],[830,286]] },
+    { kind:"person",  speed:4, pts:[GATE_OUT,[V2,R_B],[V2,H_N],[R_R,H_N],[R_R,R_B],[V2,R_B],GATE_OUT] },
+    { kind:"person",  speed:5, pts:[GATE_OUT,[V2,R_B],[V1,R_B],[V1,H_N],[R_L,H_N],[R_L,R_B],[V2,R_B],GATE_OUT] },
+    { kind:"person",  speed:4, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V3,H_S],[V3,H_N],[640,H_N],[640,282]] },
+    { kind:"person",  speed:5, pts:[GATE_OUT,[V2,R_B],[V2,H_S],[V2,H_N],[V2,R_T],[R_L,R_T],[R_L,H_N],[V1,H_N],[V1,H_S],[V2,H_S],[V2,R_B],GATE_OUT] }
   ];
 
   var CLUSTERS = [

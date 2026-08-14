@@ -246,6 +246,7 @@
    something worth a look, red for something being acted on.
    -------------------------------------------------------------------------- */
 
+.feed__item[data-level="alert"] .feed__glyph,
 .feed__item[data-level="suspicious"] .feed__glyph {
   background-color: rgba(233, 185, 73, 0.14);
   border-color: rgba(233, 185, 73, 0.4);
@@ -262,6 +263,7 @@
 
 /* The whole entry is outlined, so severity is legible from the shape of the
    row and not only from the glyph colour. */
+.feed__item[data-level="alert"],
 .feed__item[data-level="suspicious"] {
   border-color: rgba(233, 185, 73, 0.55);
   background-color: rgba(233, 185, 73, 0.05);
@@ -270,4 +272,31 @@
 .feed__item[data-level="critical"] {
   border-color: rgba(255, 59, 48, 0.6);
   background-color: rgba(255, 59, 48, 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   Console header
+   The word LIVE was redundant next to a stream that is visibly moving; the
+   pulsing dot carries it on its own. Kept as a labelled status node so the
+   meaning survives for anyone not seeing the colour.
+   -------------------------------------------------------------------------- */
+
+.console__live {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent-glow);
+  animation: console-live 2s var(--ease) infinite;
+}
+
+@keyframes console-live {
+  0%, 100% { opacity: 1;   box-shadow: 0 0 0 0 var(--accent-glow); }
+  50%      { opacity: 0.5; box-shadow: 0 0 0 5px transparent; }
+}
+
+/* The dot is in .console__bar, a sibling of the body holding the stage, so
+   :has() on the shared ancestor is the only way to reach it. */
+.console:has([data-siteplan].is-idle) .console__live {
+  animation-play-state: paused;
 }
