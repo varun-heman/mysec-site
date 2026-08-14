@@ -72,13 +72,14 @@
    The keyframe below is only the no-JS fallback; .js-plan switches it off.
    -------------------------------------------------------------------------- */
 
-.sp-node { fill: var(--bg); stroke: var(--accent); stroke-width: 1.6; }
-.sp-node-core { fill: var(--accent); }
+.sp-node { fill: var(--bg); stroke: var(--accent); stroke-width: 1.6; transition: stroke 240ms var(--ease); }
+.sp-node-core { fill: var(--accent); transition: fill 240ms var(--ease); }
 
 .sp-cone {
   /* Fades to nothing at the far edge, so coverage falls off instead of
      ending on a hard arc. */
   fill: url(#sp-fade);
+  transition: fill 240ms var(--ease);
 }
 
 .sp-cam__pan { animation: sp-sweep 9s ease-in-out infinite alternate; }

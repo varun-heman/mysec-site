@@ -94,6 +94,7 @@
   var MAX_MOVERS = 12, SPAWN = [1800,4200];
   var INCIDENT_FIRST = [6000,11000], INCIDENT_GAP = [12000,20000];
   var CROWD_GAP = [28000,46000], FLAG_MS = 7000;
+  var CAM_HOLD = 2800;   // ms a camera keeps its tint after losing the subject
 
   function rand(r){ return r[0] + Math.random()*(r[1]-r[0]); }
   function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
@@ -151,7 +152,7 @@
         span: 20 + Math.random()*14,
         w: 0.12 + Math.random()*0.14,
         phase: Math.random()*Math.PI*2,
-        aim: 0, lastAim: null, level: null, lastLevel: null
+        aim: 0, lastAim: null, holdLevel: null, holdUntil: 0, lastLevel: null
       };
     });
 
@@ -293,7 +294,6 @@
           c.pan.setAttribute("transform","rotate("+c.aim.toFixed(1)+")");
           c.lastAim = c.aim;
         }
-        c.level = null;
       }
 
       for (i=live.length-1;i>=0;i--){
@@ -320,8 +320,12 @@
           var diff = Math.abs(((Math.atan2(dy,dx)/DEG - c.aim + 540) % 360) - 180);
           if (diff > SEE_HALF) continue;
           seen = true;
-          if (u.flagged && c.level !== "critical") c.level = u.level;
-          break;
+          if (!u.flagged) break;          // only need one witness for culling
+          /* Every camera with the subject in frame takes the tint and starts
+             its own hold, so the handover between them reads as a track rather
+             than a single lamp blinking. Critical outranks suspicious. */
+          if (c.holdLevel !== "critical") c.holdLevel = u.level;
+          c.holdUntil = now + CAM_HOLD;
         }
 
         if (seen !== u.lastSeen){
@@ -335,12 +339,17 @@
         }
       }
 
-      /* Tint only the cameras whose state actually changed. */
+      /* A camera holds its tint for CAM_HOLD after last seeing the subject, so
+         it stays lit while the subject moves on instead of flicking off the
+         instant it leaves the cone. Only cameras whose state changed are
+         written. */
       for (i=0;i<cams.length;i++){
         c = cams[i];
-        if (c.level !== c.lastLevel){
-          c.g.setAttribute("class", "sp-cam" + (c.level ? " is-"+c.level : ""));
-          c.lastLevel = c.level;
+        var lvl = now < c.holdUntil ? c.holdLevel : null;
+        if (lvl === null) c.holdLevel = null;
+        if (lvl !== c.lastLevel){
+          c.g.setAttribute("class", "sp-cam" + (lvl ? " is-"+lvl : ""));
+          c.lastLevel = lvl;
         }
       }
 
