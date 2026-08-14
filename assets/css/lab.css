@@ -1,0 +1,1393 @@
+/* ==========================================================================
+   mySecurity — LAB: CSS-3D bullet CCTV camera
+   Experiment-only stylesheet. Loaded last on lab.html, used nowhere else.
+
+   ---------------------------------------------------------------------------
+   HOW THE RIG IS BUILT
+   ---------------------------------------------------------------------------
+   Everything lives in one 3D space: `.cam` supplies the `perspective`,
+   `.cam__scene` holds the fixed three-quarter view rotation, and every group
+   below it keeps `transform-style: preserve-3d` so leaf faces are depth-sorted
+   against each other by the compositor rather than by DOM order.
+
+   Coordinate convention (scene space, before the view rotation):
+       +X  right — the direction the camera looks
+       +Y  down  (CSS convention)
+       +Z  toward the viewer
+
+   Positioning convention: every group (`.cam-g`) fills the scene box, and
+   every leaf face (`.cam-f`) is centred inside its group with
+   `inset: 0; margin: auto`. Parts are therefore placed *purely* with
+   `translate3d()` from the scene centre — no `left`/`top` arithmetic, which
+   keeps every part on the compositor and trivially animatable.
+
+   Layout along the X axis (scene px, 0 = scene centre):
+       -256  wall plane
+       -248  wall plate collar          -240  plate disc
+       -240  ... -118  mount arm
+       -118  PAN PIVOT (the post)
+       -145  ... +70   camera body      r38
+       -105  ... +145  sun hood         r46   (overhangs the lens by 27)
+       +70   ... +118  lens barrel      r28
+       +118  ... +122  lens stack
+       +118  ... +358  detection cone
+
+   CYLINDERS
+   A tube is N thin rectangles fanned around an axis. For an axis along X:
+
+       transform: rotateX(i * 360/N) translateZ(r)
+
+   `rotateX` spins the face around the tube axis, `translateZ(r)` pushes it out
+   to the wall. Each face is `length` wide (along the axis) and one chord tall:
+
+       chord = 2 * r * tan(180/N)      (+ ~1px so the seams don't hairline)
+
+   For an axis along Y (the pan post) swap in `rotateY(a) translateZ(r)`.
+   18 faces is the sweet spot for the body: 12 reads visibly faceted at this
+   size, 24 costs more elements than the extra roundness buys. Faces are
+   `backface-visibility: hidden`, so the far half of every tube is simply not
+   drawn — cheaper, and it removes all z-fighting on the silhouette.
+
+   FAKE LIGHTING
+   Each face carries a `--shade` number: the alpha of a flat black overlay,
+   computed offline from `dot(face_normal, light_dir)` with a key light above
+   and slightly in front (pre-counter-rotated by the scene yaw so the lit side
+   lands at screen upper-left). Shading is purely *subtractive* from a mid-tone
+   `--shell`, which is what lets one set of numbers work in both themes: dark
+   theme reads as anodised charcoal, light theme as white polycarbonate.
+
+   THE PAN
+   `.cam__yaw` is the only element in the rig that animates. Its
+   `transform-origin` is moved to the mount post (scene x = -118px) so the head
+   swings on the bracket like real hardware instead of pirouetting about its
+   own centre.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Hero composition — camera, copy, and the sweeping light cone
+
+   The rig is mounted upper-left and angled down toward the copy. Its viewing
+   angle is drawn as a real cone that rotates in the screen plane, and the same
+   angle drives a conic-gradient wedge clipped to the headline text, so the
+   words light up exactly where the beam crosses them. One variable, --sweep,
+   drives both: they cannot drift out of sync.
+
+   WHY THE VIEW ANGLE CHANGED
+   The head yaws about Y in scene space. How much of that yaw survives as a
+   *screen-space* rotation depends entirely on how far down we look at the rig:
+
+       screen_angle(theta) = atan2(-sin(theta) * sin(phi), cos(theta))
+
+   where theta = scene yaw (-38deg base, +/-22deg pan) and phi = the downward
+   view tilt. At the original phi = 10deg the beam barely moved on screen
+   (16.7deg -> 2.9deg) — the head turned but the cone looked static. At
+   phi = 34deg the same pan projects to 44.1deg -> 9.1deg, a sweep you can
+   actually read, while still showing the camera in three-quarter from above.
+   Those two numbers are --sweep-a and --sweep-b below; they are derived from
+   the geometry, not eyeballed.
+   ========================================================================== */
+
+.hero--lab {
+  /* Beam pivot, in hero-box coordinates: the mean position of the lens across
+     one full sweep, measured in-browser at each breakpoint. The lens does move
+     (+/-44px at this size) as the head pans, but the apex is a soft bloom
+     roughly three times that wide, so a fixed mean is indistinguishable from
+     tracking it — and it costs no JavaScript. Overridden per breakpoint in
+     section 13. */
+  --pivot-x: 280px;
+  --pivot-y: 172px;
+
+  /* Sweep limits — see the derivation above. */
+  --sweep-a: 46.4deg;   /* head at its left limit,  beam steep  */
+  --sweep-b: 14deg;     /* head at its right limit, beam shallow */
+
+  --cycle: 8.4s;
+  --servo: cubic-bezier(0.62, 0.02, 0.34, 1);
+
+  /* Text brightness floor. The copy is NEVER hidden and never animates from
+     zero — it is legible on its own at rest, and the cone lifts it. */
+  /* Text floor. High enough to stay comfortably legible unlit, and high enough
+     that color-dodge has headroom to work with — dodge does almost nothing to
+     near-black pixels, so dimming too far kills the effect it is meant to
+     enable. */
+  --copy-dim: color-mix(in srgb, var(--display) 52%, var(--bg));
+  --lead-dim: color-mix(in srgb, var(--muted) 66%, var(--bg));
+
+  position: relative;
+  isolation: isolate;          /* contain the beam's blending to this section */
+  overflow: hidden;            /* the rig and cone both overhang the box */
+  min-height: 660px;
+  padding-top: clamp(2rem, 0.5rem + 9vw, 7rem);
+
+  /* Drives the beam rotation AND the headline wedge from one clock. */
+  animation: hero-sweep var(--cycle) var(--servo) infinite;
+}
+
+/* Registering --sweep as an <angle> is what makes it interpolate instead of
+   snapping between keyframes. Without @property the wedge simply parks at its
+   initial value — the page degrades to a static cone, never to broken text. */
+@property --sweep {
+  syntax: "<angle>";
+  initial-value: 24deg;
+  inherits: true;
+}
+
+@keyframes hero-sweep {
+  0%,   7%   { --sweep: 46.4deg; }
+  43%,  57%  { --sweep: 14deg;   }
+  93%,  100% { --sweep: 46.4deg; }
+}
+
+/* ---- idle ---------------------------------------------------------------
+   hero-camera.js adds .is-idle when the hero scrolls out of view or the tab is
+   hidden. Stopping its own frame loop is not enough on its own: the rig's CSS
+   animations would keep running against an element nobody is looking at, and
+   the compositor keeps paying for them. This parks the lot. */
+
+.hero--lab.is-idle,
+.hero--lab.is-idle .cam__yaw,
+.hero--lab.is-idle .body__led,
+.hero--lab.is-idle .lens__spec,
+.hero--lab.is-idle .hero__beam {
+  animation-play-state: paused;
+}
+
+/* ---- JS hand-off --------------------------------------------------------
+   hero-camera.js adds .js-cam and then publishes --yaw, --sweep and the pivot
+   every frame. These rules hand control over: the keyframe animations are the
+   no-JS fallback, and a CSS animation on `transform` would otherwise win over
+   the declarations below.
+
+   The custom properties are read straight into transforms, so the compositor
+   still does the work — the controller only writes numbers. */
+
+.js-cam .hero--lab { animation: none; }
+
+.js-cam .cam__yaw {
+  animation: none;
+  transform: rotateY(var(--yaw, -24deg));
+}
+
+/* ---- the rig ------------------------------------------------------------
+   Sized to the scaled scene so left/top place it predictably; .cam still
+   centres itself inside this box. */
+
+.hero__rig {
+  --scene-w: 640px;
+  --scene-h: 300px;
+  --rig-scale: 0.82;
+
+  position: absolute;
+  left: var(--rig-x, -2%);
+  top: var(--rig-y, 1%);
+  width: calc(var(--scene-w) * var(--rig-scale));
+  height: calc(var(--scene-h) * var(--rig-scale));
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ---- alert --------------------------------------------------------------
+   The "it has spotted you" beat. Pinned to --pivot-x/y — the lens position the
+   controller publishes every frame — so it sits over the front of the camera
+   and travels with the head instead of floating at a fixed spot in the
+   section. Two elements: the outer one holds the position (which changes every
+   frame), the inner one holds the animation. Combining them would mean the
+   keyframes had to restate the offset, and every position update would fight
+   the running animation. */
+
+.cam-alert {
+  position: absolute;
+  left: var(--pivot-x, 280px);
+  top: var(--pivot-y, 172px);
+  z-index: 6;
+  transform: translate(-50%, -175%);
+  pointer-events: none;
+}
+
+.cam-alert i {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1.4rem + 2vw, 3.25rem);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow:
+    0 0 10px var(--accent-glow),
+    0 0 26px var(--accent-glow),
+    0 2px 0 rgba(0, 0, 0, 0.45);
+  opacity: 0;
+}
+
+/* Overshoot and settle. A linear fade-in reads as a tooltip; snapping past
+   full size and rebounding reads as alarm. */
+.cam-alert.is-on i {
+  animation: cam-alert 1.7s var(--ease-out) forwards;
+}
+
+@keyframes cam-alert {
+  0%   { opacity: 0; transform: scale(0.3) translateY(14px); }
+  10%  { opacity: 1; transform: scale(1.35) translateY(-2px); }
+  20%  { transform: scale(0.94); }
+  28%  { transform: scale(1.06); }
+  36%  { transform: scale(1); }
+  72%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.9) translateY(-10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cam-alert.is-on i { animation: none; opacity: 0; }
+}
+
+/* ---- copy ---------------------------------------------------------------
+   The copy is dimmed at rest and lit as the beam crosses it, by two effects
+   working together:
+
+     1. The cone overlay blends in color-dodge, lifting whatever it passes over
+        (text, dots, buttons) — the ambient half of the effect.
+     2. Each [data-lit] element paints a bright copy of its own glyphs, clipped
+        to a wedge that shares the beam's angle — the punch.
+
+   WHY BOTH
+   color-dodge alone is uniform: it raises the words and the gaps between them
+   together, so the text brightens but does not read as *catching* light.
+   The wedge alone has no spill and looks like a mask. Together the light falls
+   on the surface and the letters pick it up.
+
+   WHY color-dodge AND NOT screen
+   `screen` adds light uniformly, which raises the near-black background
+   proportionally MORE than the already-brighter text — contrast drops and the
+   words pop less. color-dodge divides by the inverse of the backdrop: bright
+   pixels bloom, near-black barely moves. Which is also why --copy-dim above
+   is a floor, not a fade to nothing.
+
+   The lit layer is a ::after fed by data-text, which the controller fills from
+   each element's own textContent — never a duplicated node, so the
+   accessibility tree still sees the text exactly once. If background-clip:text
+   is unsupported it paints nothing and the dim, legible text shows through. */
+
+.hero--lab .hero__inner { position: relative; z-index: 2; }
+
+.hero--lab .hero__title { color: var(--copy-dim); }
+.hero--lab .hero__lead  { color: var(--lead-dim); }
+.hero--lab .hero__note  { color: color-mix(in srgb, var(--faint) 82%, var(--bg)); }
+
+.hero--lab [data-lit] { position: relative; }
+
+.hero--lab [data-lit]::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  pointer-events: none;
+
+  /* conic 0deg points up and runs clockwise; the beam angle is measured from
+     +X, hence the 90deg offset. The origin sits outside this box (up and to
+     the left), which conic-gradient allows. */
+  background-image: conic-gradient(
+    from calc(90deg + var(--sweep) - 17deg)
+    at calc(var(--pivot-x) - var(--dx, 300px))
+       calc(var(--pivot-y) - var(--dy, 200px)),
+    transparent 0deg,
+    color-mix(in srgb, var(--display) 20%, transparent) 6deg,
+    color-mix(in srgb, var(--display) 70%, transparent) 12deg,
+    var(--display) 17deg,
+    color-mix(in srgb, var(--accent) 45%, var(--display)) 21deg,
+    color-mix(in srgb, var(--display) 55%, transparent) 27deg,
+    transparent 34deg
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Controls light up too, but additively only — never dimmed. Dimming a call
+   to action to make a lighting effect work would trade real contrast for
+   decoration, so the beam can only ever ADD to these. */
+.hero--lab [data-lit-glow] {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero--lab [data-lit-glow]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background-image: conic-gradient(
+    from calc(90deg + var(--sweep) - 17deg)
+    at calc(var(--pivot-x) - var(--dx, 300px))
+       calc(var(--pivot-y) - var(--dy, 200px)),
+    transparent 0deg,
+    rgba(255, 255, 255, 0.05) 8deg,
+    rgba(255, 255, 255, 0.28) 17deg,
+    color-mix(in srgb, var(--accent) 45%, rgba(255, 255, 255, 0.22)) 22deg,
+    rgba(255, 255, 255, 0.04) 28deg,
+    transparent 34deg
+  );
+}
+
+/* On white, screen erases the highlight — saturate toward the accent instead. */
+[data-theme="light"] .hero--lab [data-lit-glow]::after {
+  mix-blend-mode: multiply;
+  background-image: conic-gradient(
+    from calc(90deg + var(--sweep) - 17deg)
+    at calc(var(--pivot-x) - var(--dx, 300px))
+       calc(var(--pivot-y) - var(--dy, 200px)),
+    transparent 0deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 8deg,
+    color-mix(in srgb, var(--accent) 26%, transparent) 17deg,
+    color-mix(in srgb, var(--accent) 16%, transparent) 24deg,
+    transparent 34deg
+  );
+}
+
+/* Body copy takes it quieter than the headline — at full strength a wedge
+   crossing small text reads as a flicker rather than a sweep. */
+.hero--lab .hero__lead::after { opacity: 0.8; }
+.hero--lab .hero__note::after { opacity: 0.65; }
+
+/* On white the lit copy has to go darker and more saturated, not brighter. */
+[data-theme="light"] .hero--lab [data-lit]::after {
+  background-image: conic-gradient(
+    from calc(90deg + var(--sweep) - 17deg)
+    at calc(var(--pivot-x) - var(--dx, 300px))
+       calc(var(--pivot-y) - var(--dy, 200px)),
+    transparent 0deg,
+    color-mix(in srgb, var(--display) 25%, transparent) 6deg,
+    color-mix(in srgb, var(--display) 75%, transparent) 12deg,
+    var(--display) 17deg,
+    color-mix(in srgb, var(--accent) 55%, var(--display)) 21deg,
+    color-mix(in srgb, var(--display) 60%, transparent) 27deg,
+    transparent 34deg
+  );
+}
+
+/* ---- pointer tracker ----------------------------------------------------
+   An object-detection overlay that latches onto the cursor while it is over
+   the hero: bracketed box, an identity chip above it, a behaviour readout
+   below. It is the camera's point of view made literal — the thing the rig is
+   looking at, annotated the way the product would annotate it.
+
+   The box lags the cursor very slightly. That lag is the whole trick: a box
+   welded to the pointer reads as a cursor skin, whereas one that has to catch
+   up reads as a tracker following a subject.
+
+   Purely decorative and non-interactive: aria-hidden, pointer-events:none, and
+   it never sits between the user and a control. */
+
+.tracker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  z-index: 5;                    /* above the rig (4) — it annotates the scene */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms var(--ease);
+
+  --box: 72px;
+  --track: var(--accent);
+}
+
+.tracker.is-on { opacity: 1; }
+
+/* Amber for a subject losing interest. Off-palette on purpose: the accent
+   means "good" everywhere else on the site, so a warning cannot also be it. */
+.tracker[data-state="loiter"] { --track: #E9B949; }
+
+.tracker__box {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--box);
+  height: var(--box);
+  transform: translate(-50%, -50%);
+  border: 1px solid color-mix(in srgb, var(--track) 32%, transparent);
+  background-color: color-mix(in srgb, var(--track) 7%, transparent);
+  transition: border-color 200ms var(--ease), background-color 200ms var(--ease);
+}
+
+/* Four corner brackets — the detail that makes it read as machine vision
+   rather than as a plain square. Each corner is one element showing two of
+   its four borders. */
+.tracker__box i {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--track);
+  transition: border-color 200ms var(--ease);
+}
+
+.tracker__box i:nth-child(1) { top: -1px;    left: -1px;  border-right: none; border-bottom: none; }
+.tracker__box i:nth-child(2) { top: -1px;    right: -1px; border-left: none;  border-bottom: none; }
+.tracker__box i:nth-child(3) { bottom: -1px; right: -1px; border-left: none;  border-top: none; }
+.tracker__box i:nth-child(4) { bottom: -1px; left: -1px;  border-right: none; border-top: none; }
+
+.tracker__tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 3px 5px;
+  border-radius: 2px;
+  transition: background-color 160ms var(--ease), color 160ms var(--ease),
+              border-color 160ms var(--ease);
+}
+
+/* Identity above, behaviour below. Filled vs outlined so the two readouts are
+   distinguishable at a glance. */
+.tracker__tag--id {
+  transform: translate(-50%, calc(-1 * (var(--box) / 2 + 16px)));
+  background-color: var(--track);
+  color: #06130E;
+  font-weight: var(--fw-medium);
+}
+
+.tracker__tag--act {
+  transform: translate(-50%, calc(var(--box) / 2 + 6px));
+  background-color: color-mix(in srgb, var(--bg) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--track) 45%, transparent);
+  color: var(--track);
+}
+
+[data-theme="light"] .tracker__tag--id { color: #FFFFFF; }
+
+/* The rig is hidden below this width and there is no hover on touch anyway. */
+@media (max-width: 720px) {
+  .tracker { display: none; }
+}
+
+/* ---- the cone -----------------------------------------------------------
+   Two stacked wedges: a wide dim spill and a narrow bright core. Both pivot
+   at the lens. `screen` lifts whatever they cross without washing the
+   near-black canvas to grey the way plus-lighter does. */
+
+.hero__beam {
+  position: absolute;
+  left: var(--pivot-x);
+  top: var(--pivot-y);
+  /* Sized to reach the far corner of the hero from the pivot (~1300px) and no
+     further. This element is blended, so every extra pixel is re-composited
+     every frame — it is the most expensive thing on the page. */
+  width: 1360px;
+  height: 1020px;
+  margin-top: -510px;              /* centre the pivot vertically */
+  transform-origin: 0 50%;
+  transform: rotate(var(--sweep));
+  z-index: 4;                    /* over the rig — the feather hides the root */
+  pointer-events: none;
+  mix-blend-mode: color-dodge;
+  /* No will-change here on purpose. A blended element has to be re-rastered
+     against its backdrop regardless, so promoting it buys nothing and pins a
+     ~1.4M pixel layer in memory for the life of the page. */
+}
+
+/* THE FEATHER.
+   A clip-path edge is binary, so a wedge always has a visible starting edge
+   somewhere — which is why moving it behind the housing only ever traded
+   "starts in mid-air" for "comes from behind the camera". The fix is to make
+   the wedge's own alpha ramp up from nothing over its first ~300px, centred on
+   the lens. There is then no edge to see: the light has no beginning, it just
+   becomes visible a short way out of the barrel.
+
+   The mask is applied to the wedges only. The bloom below is deliberately left
+   unmasked so it fills the faded region — so the beam reads as welling out of
+   the lens rather than fading in beside it.
+
+   Masks resolve in the element's own box, before transform, so this stays
+   pinned to the apex as the beam rotates. */
+.hero__beam-spill,
+.hero__beam-core {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(
+    circle 420px at 0 50%,
+    transparent 0,
+    transparent 95px,
+    rgba(0, 0, 0, 0.14) 150px,
+    rgba(0, 0, 0, 0.55) 250px,
+    #000 400px
+  );
+  mask-image: radial-gradient(
+    circle 420px at 0 50%,
+    transparent 0,
+    transparent 95px,
+    rgba(0, 0, 0, 0.14) 150px,
+    rgba(0, 0, 0, 0.55) 250px,
+    #000 400px
+  );
+}
+
+/* Muzzle bloom: unclipped, centred exactly on the pivot, so the beam grows
+   out of the lens instead of beginning at a visible edge. */
+.hero__beam::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 70%, white) 0%,
+    color-mix(in srgb, var(--accent) 30%, transparent) 22%,
+    transparent 62%
+  );
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+/* Wide, soft spill. */
+.hero__beam-spill {
+  clip-path: polygon(0 49.7%, 0 50.3%, 100% 80%, 100% 20%);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 34%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 9%, transparent) 30%,
+    transparent 64%
+  );
+  opacity: 0.6;
+}
+
+/* Narrow, brighter core with a hot apex. */
+.hero__beam-core {
+  clip-path: polygon(0 49.85%, 0 50.15%, 100% 66%, 100% 34%);
+  background:
+    radial-gradient(220px 180px at 0% 50%,
+      color-mix(in srgb, var(--accent) 85%, white) 0%,
+      transparent 70%),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 70%, transparent) 0%,
+      color-mix(in srgb, var(--accent) 18%, transparent) 34%,
+      transparent 68%
+    );
+  opacity: 0.9;
+}
+
+/* Light theme: `screen` on white is a no-op, so the cone would vanish.
+   Swap to multiply and darken instead — a shadow of attention rather than a
+   beam of light, which is the honest way to show a cone on paper. */
+/* On white, color-dodge saturates instantly to pure white and the cone
+   disappears. Multiply is the correct inverse: the beam reads as a tinted
+   shadow of attention falling across the page, and the copy darkens into
+   full contrast rather than brightening. */
+[data-theme="light"] .hero__beam {
+  mix-blend-mode: multiply;
+}
+
+[data-theme="light"] .hero--lab {
+  --copy-dim: color-mix(in srgb, var(--display) 58%, var(--bg));
+  --lead-dim: color-mix(in srgb, var(--muted) 72%, var(--bg));
+}
+
+[data-theme="light"] .hero__beam-spill {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 30%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 10%, transparent) 34%,
+    transparent 78%
+  );
+  opacity: 0.5;
+}
+
+[data-theme="light"] .hero__beam-core {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 52%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 16%, transparent) 40%,
+    transparent 82%
+  );
+  opacity: 0.6;
+}
+
+/* In light theme the headline is dark on white, so "lit" means going darker
+   and fully saturated rather than brighter. */
+[data-theme="light"] .hero--lab {
+  --copy-dim: color-mix(in srgb, var(--display) 52%, var(--bg));
+}
+
+/* ==========================================================================
+   2. Rig root — perspective, view angle, responsive scale
+   ========================================================================== */
+
+.cam {
+  /* Centred by absolute positioning rather than by grid/flex alignment on the
+     stage: the rig's layout box stays 640px wide whatever `--rig-scale` is,
+     so any content-sized track (grid column, flex line) would be 640px wide
+     and pin the rig to the left of a wider stage — and overflow a narrower
+     one. left/top 50% + translate(-50%,-50%) is immune to both. */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--scene-w);
+  height: var(--scene-h);
+
+  /* Long lens: enough perspective to read as 3D without the wide-angle
+     distortion a short value gives across a 640px-wide scene. */
+  perspective: 1500px;
+  perspective-origin: 50% 44%;
+
+  /* One transform centres and scales the whole rig; no part dimension is
+     ever rewritten per breakpoint. */
+  transform: translate(-50%, -50%) scale(var(--rig-scale));
+
+  /* ---- local material tokens ---------------------------------------------
+     Housing follows the theme surfaces (charcoal in dark, white poly in
+     light); glass stays on the fixed neutral ramp, because real lens glass
+     is dark in a bright room too. */
+  --shell: var(--surface-hover);
+  --shell-edge: var(--border-strong);
+  --shell-deep: var(--surface);
+  /* Status LED. Deliberately off-palette: a red tally lamp is the universal
+     "this thing is recording" signal, and it keeps the one point of warm
+     colour from competing with the accent-green light cone. */
+  --led: #FF3B30;
+  --led-glow: rgba(255, 59, 48, 0.55);
+
+  --glass-0: #05100c;
+  --glass-1: var(--n-1000);
+  --glass-2: var(--n-800);
+}
+
+.cam__scene {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  /* translateX re-centres the composition (the detection cone throws the
+     visual mass right); then the fixed three-quarter view. -34deg looks
+     down onto the hood hard enough that the pan projects to a real
+     screen-space sweep (see lab.css section 1); -38deg swings the lens toward the
+     viewer so we read the front face, the top and the near side at once.
+     The pan is +/-22deg on top of this, so the head sweeps between -60deg
+     (turned well toward the viewer) and -16deg (near profile) — a wide,
+     legible arc that never reaches a flat head-on or a flat side-on. */
+  transform: translateX(-22px) rotateX(-34deg) rotateY(-38deg);
+}
+
+/* ---- shared primitives --------------------------------------------------
+   .cam-g  group: fills the scene box, keeps the 3D context alive
+   .cam-f  face:  centred leaf, placed only by transform                    */
+
+.cam-g {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.cam-f {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+
+/* Housing material.
+   `--shade` — per-face black overlay alpha (the fake lighting)
+   `--sheen` — lengthwise falloff that darkens the ends of a tube
+   The flat 4.5% white layer is a material lift: it stops the dark theme
+   housing sinking into the near-black canvas, and is a no-op in light. */
+.cam-shell {
+  --shade: 0;
+  --sheen: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.32) 0%,
+    rgba(0, 0, 0, 0) 26%,
+    rgba(0, 0, 0, 0) 76%,
+    rgba(0, 0, 0, 0.16) 100%
+  );
+  background-color: var(--shell);
+  background-image:
+    linear-gradient(rgba(0, 0, 0, var(--shade)), rgba(0, 0, 0, var(--shade))),
+    linear-gradient(rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+    var(--sheen);
+  backface-visibility: hidden;
+}
+
+/* ==========================================================================
+   3. Wall — the implied mounting surface (does not pan)
+   ========================================================================== */
+
+.wall__panel {
+  width: 420px;
+  height: 340px;
+  /* rotateY(90deg) turns the plane's normal to +X so it faces the camera. */
+  transform: translate3d(-256px, 0, 0) rotateY(90deg);
+  background-color: var(--surface-2);
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 60%),
+    radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px;
+  /* Fade the panel out at its edges so it reads as an implied surface
+     rather than a floating rectangle. */
+  -webkit-mask-image: radial-gradient(ellipse 56% 56% at 46% 50%, #000 18%, transparent 80%);
+  mask-image: radial-gradient(ellipse 56% 56% at 46% 50%, #000 18%, transparent 80%);
+}
+
+/* Soft cast shadow around the mount, drawn just in front of the wall plane. */
+.wall__shadow {
+  width: 260px;
+  height: 260px;
+  transform: translate3d(-255px, 22px, 0) rotateY(90deg);
+  background: radial-gradient(circle closest-side, rgba(0, 0, 0, 0.6), transparent 72%);
+}
+
+[data-theme="light"] .wall__shadow {
+  background: radial-gradient(circle closest-side, rgba(0, 0, 0, 0.13), transparent 72%);
+}
+
+/* Cable dropping out of the mount and running away along the wall. Drawn as
+   two borders of a rounded box — smoother and far cheaper than segmenting
+   a tube along a curve. */
+.wall__cable {
+  width: 72px;
+  height: 96px;
+  transform: translate3d(-254px, 96px, 0) rotateY(90deg);
+  border-left: 4px solid var(--shell-deep);
+  border-bottom: 4px solid var(--shell-deep);
+  border-bottom-left-radius: 52px;
+  box-shadow: -1px 1px 0 var(--border-strong);
+}
+
+/* ==========================================================================
+   4. Wall plate — collar tube + front disc + fixings (does not pan)
+   ========================================================================== */
+
+.plate { transform: translate3d(-248px, 0, 0); }
+
+/* 14-sided tube, r48, 16 deep, axis X. `--sheen: none` because the tube is
+   only 16px long — the lengthwise falloff would just muddy it. */
+.plate__seg { width: 16px; height: 23.01px; --sheen: none; }
+.plate__seg:nth-child(1) { transform: rotateX(0deg) translateZ(48px); --shade: 0.078; }
+.plate__seg:nth-child(2) { transform: rotateX(25.71deg) translateZ(48px); --shade: 0.018; }
+.plate__seg:nth-child(3) { transform: rotateX(51.43deg) translateZ(48px); --shade: 0; }
+.plate__seg:nth-child(4) { transform: rotateX(77.14deg) translateZ(48px); --shade: 0.028; }
+.plate__seg:nth-child(5) { transform: rotateX(102.86deg) translateZ(48px); --shade: 0.096; }
+.plate__seg:nth-child(6) { transform: rotateX(128.57deg) translateZ(48px); --shade: 0.19; }
+.plate__seg:nth-child(7) { transform: rotateX(154.29deg) translateZ(48px); --shade: 0.292; }
+.plate__seg:nth-child(8) { transform: rotateX(180deg) translateZ(48px); --shade: 0.382; }
+.plate__seg:nth-child(9) { transform: rotateX(205.71deg) translateZ(48px); --shade: 0.442; }
+.plate__seg:nth-child(10) { transform: rotateX(231.43deg) translateZ(48px); --shade: 0.46; }
+.plate__seg:nth-child(11) { transform: rotateX(257.14deg) translateZ(48px); --shade: 0.432; }
+.plate__seg:nth-child(12) { transform: rotateX(282.86deg) translateZ(48px); --shade: 0.364; }
+.plate__seg:nth-child(13) { transform: rotateX(308.57deg) translateZ(48px); --shade: 0.27; }
+.plate__seg:nth-child(14) { transform: rotateX(334.29deg) translateZ(48px); --shade: 0.168; }
+
+/* Front disc. Two radial gradients fake the crown and the rim light. */
+.plate__face {
+  width: 98px;
+  height: 98px;
+  border-radius: 50%;
+  transform: translate3d(8px, 0, 0) rotateY(90deg);
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.10), transparent 58%),
+    radial-gradient(circle at 62% 70%, rgba(0, 0, 0, 0.42), transparent 66%),
+    var(--shell);
+  box-shadow:
+    inset 0 0 0 1px var(--shell-edge),
+    inset 0 0 14px rgba(0, 0, 0, 0.35);
+}
+
+/* Four fixings — plain 2D children of the (flat) plate face. */
+.plate__screw {
+  position: absolute;
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: var(--shell-deep);
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.plate__screw:nth-child(1) { left: 69.79px; top: 21.71px; }
+.plate__screw:nth-child(2) { left: 69.79px; top: 69.79px; }
+.plate__screw:nth-child(3) { left: 21.71px; top: 69.79px; }
+.plate__screw:nth-child(4) { left: 21.71px; top: 21.71px; }
+
+/* ==========================================================================
+   5. Mount arm — plate to knuckle, 12-sided tube r13 (does not pan)
+   ========================================================================== */
+
+.arm { transform: translate3d(-179px, 34px, 0); }
+
+.arm__seg { width: 122px; height: 8.07px; }
+.arm__seg:nth-child(1) { transform: rotateX(0deg) translateZ(13px); --shade: 0.078; }
+.arm__seg:nth-child(2) { transform: rotateX(30deg) translateZ(13px); --shade: 0.012; }
+.arm__seg:nth-child(3) { transform: rotateX(60deg) translateZ(13px); --shade: 0.005; }
+.arm__seg:nth-child(4) { transform: rotateX(90deg) translateZ(13px); --shade: 0.058; }
+.arm__seg:nth-child(5) { transform: rotateX(120deg) translateZ(13px); --shade: 0.157; }
+.arm__seg:nth-child(6) { transform: rotateX(150deg) translateZ(13px); --shade: 0.275; }
+.arm__seg:nth-child(7) { transform: rotateX(180deg) translateZ(13px); --shade: 0.382; }
+.arm__seg:nth-child(8) { transform: rotateX(210deg) translateZ(13px); --shade: 0.448; }
+.arm__seg:nth-child(9) { transform: rotateX(240deg) translateZ(13px); --shade: 0.455; }
+.arm__seg:nth-child(10) { transform: rotateX(270deg) translateZ(13px); --shade: 0.403; }
+.arm__seg:nth-child(11) { transform: rotateX(300deg) translateZ(13px); --shade: 0.303; }
+.arm__seg:nth-child(12) { transform: rotateX(330deg) translateZ(13px); --shade: 0.185; }
+
+/* ==========================================================================
+   6. The pan — the only animated transform in the rig
+   --------------------------------------------------------------------------
+   `.cam__yaw` fills the scene box, so 50% is the scene centre and the mount
+   post sits 118px to the left of it. Putting the origin there makes the whole
+   head swing on the bracket. Everything bolted to the head (post, body, hood,
+   barrel, lens, LEDs, detection cone) is a child of this element; the wall,
+   plate and arm are siblings and stay put.
+
+   Timing: a real PTZ head ramps up, ramps down and then *dwells* at each
+   limit. The keyframes hold for 14% of the cycle at both extremes, and the
+   bezier is symmetric but steeper through the middle than ease-in-out, which
+   reads as a servo rather than a pendulum. 8.4s a cycle: slow enough to read
+   as surveillance, not so slow it looks broken.
+   ========================================================================== */
+
+.cam__yaw {
+  transform-origin: calc(50% - 118px) 50% 0;
+  transform: rotateY(-24deg);
+  animation: cam-pan 8.4s cubic-bezier(0.62, 0.02, 0.34, 1) infinite;
+  /* No will-change: this group holds the whole ~100-face 3D subtree, and the
+     animation is a rotateY, so a promoted layer has to be re-rasterised every
+     frame anyway. Promoting it only pins the memory. */
+}
+
+@keyframes cam-pan {
+  /* Asymmetric on purpose. A symmetric sweep puts the right limit at scene
+     yaw -16deg, which is near profile and reads flat; -24/+14 keeps the head
+     in three-quarter at both ends. The sweep limits in section 1 are derived
+     from exactly these two numbers. */
+  0%,   7%   { transform: rotateY(-24deg); }  /* dwell — left limit  */
+  43%,  57%  { transform: rotateY(14deg);  }  /* dwell — right limit */
+  93%,  100% { transform: rotateY(-24deg); }
+}
+
+/* ==========================================================================
+   7. Pan post / knuckle — 12-sided vertical tube, r13
+   Its axis *is* the pan axis, so it spins about its own centreline: it looks
+   static while everything above it swings. Exactly how the real part behaves.
+   ========================================================================== */
+
+.post { transform: translate3d(-118px, 20px, 0); }
+
+.post__seg { width: 8.07px; height: 42px; --sheen: none; }
+.post__seg:nth-child(1) { transform: rotateY(0deg) translateZ(13px); --shade: 0.078; }
+.post__seg:nth-child(2) { transform: rotateY(30deg) translateZ(13px); --shade: 0.107; }
+.post__seg:nth-child(3) { transform: rotateY(60deg) translateZ(13px); --shade: 0.168; }
+.post__seg:nth-child(4) { transform: rotateY(90deg) translateZ(13px); --shade: 0.246; }
+.post__seg:nth-child(5) { transform: rotateY(120deg) translateZ(13px); --shade: 0.32; }
+.post__seg:nth-child(6) { transform: rotateY(150deg) translateZ(13px); --shade: 0.37; }
+.post__seg:nth-child(7) { transform: rotateY(180deg) translateZ(13px); --shade: 0.382; }
+.post__seg:nth-child(8) { transform: rotateY(210deg) translateZ(13px); --shade: 0.353; }
+.post__seg:nth-child(9) { transform: rotateY(240deg) translateZ(13px); --shade: 0.292; }
+.post__seg:nth-child(10) { transform: rotateY(270deg) translateZ(13px); --shade: 0.214; }
+.post__seg:nth-child(11) { transform: rotateY(300deg) translateZ(13px); --shade: 0.14; }
+.post__seg:nth-child(12) { transform: rotateY(330deg) translateZ(13px); --shade: 0.09; }
+
+/* Tension bolt on the knuckle — the detail that says "this joint articulates". */
+.post__bolt {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transform: translate3d(-118px, 12px, 14px);
+  background:
+    radial-gradient(circle at 36% 32%, rgba(255, 255, 255, 0.16), transparent 60%),
+    var(--shell-deep);
+  box-shadow: inset 0 0 0 1px var(--shell-edge);
+}
+
+/* ==========================================================================
+   8. Camera body — 18-sided tube, r38, 215 long, axis X
+   ========================================================================== */
+
+.body { transform: translate3d(-37.5px, 0, 0); }
+
+.body__seg { width: 215px; height: 14.5px; }
+.body__seg:nth-child(1) { transform: rotateX(0deg) translateZ(38px); --shade: 0.078; }
+.body__seg:nth-child(2) { transform: rotateX(20deg) translateZ(38px); --shade: 0.028; }
+.body__seg:nth-child(3) { transform: rotateX(40deg) translateZ(38px); --shade: 0.003; }
+.body__seg:nth-child(4) { transform: rotateX(60deg) translateZ(38px); --shade: 0.005; }
+.body__seg:nth-child(5) { transform: rotateX(80deg) translateZ(38px); --shade: 0.034; }
+.body__seg:nth-child(6) { transform: rotateX(100deg) translateZ(38px); --shade: 0.086; }
+.body__seg:nth-child(7) { transform: rotateX(120deg) translateZ(38px); --shade: 0.157; }
+.body__seg:nth-child(8) { transform: rotateX(140deg) translateZ(38px); --shade: 0.235; }
+.body__seg:nth-child(9) { transform: rotateX(160deg) translateZ(38px); --shade: 0.314; }
+.body__seg:nth-child(10) { transform: rotateX(180deg) translateZ(38px); --shade: 0.382; }
+.body__seg:nth-child(11) { transform: rotateX(200deg) translateZ(38px); --shade: 0.432; }
+.body__seg:nth-child(12) { transform: rotateX(220deg) translateZ(38px); --shade: 0.457; }
+.body__seg:nth-child(13) { transform: rotateX(240deg) translateZ(38px); --shade: 0.455; }
+.body__seg:nth-child(14) { transform: rotateX(260deg) translateZ(38px); --shade: 0.426; }
+.body__seg:nth-child(15) { transform: rotateX(280deg) translateZ(38px); --shade: 0.374; }
+.body__seg:nth-child(16) { transform: rotateX(300deg) translateZ(38px); --shade: 0.303; }
+.body__seg:nth-child(17) { transform: rotateX(320deg) translateZ(38px); --shade: 0.225; }
+.body__seg:nth-child(18) { transform: rotateX(340deg) translateZ(38px); --shade: 0.146; }
+
+/* Panel seams. Every face spans the full length of the tube, so a 1px line at
+   the same offset on all 18 of them draws one continuous ring around the
+   body — a torus for the price of a pseudo-element. */
+.body__seg::before,
+.body__seg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--hairline);
+  box-shadow: -1px 0 0 rgba(0, 0, 0, 0.4);
+}
+
+.body__seg::before { left: 40px; }
+.body__seg::after  { left: 168px; }
+
+/* Rim light along the two top faces — the one additive touch in the rig, and
+   the thing that stops the housing reading as flat grey paper. */
+.body__seg:nth-child(5),
+.body__seg:nth-child(6) {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, var(--shade)), rgba(0, 0, 0, var(--shade))),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.13) 46%, rgba(255, 255, 255, 0.03)),
+    var(--sheen);
+}
+
+/* NB: the three parts below are children of `.body`, so their translates are
+   *local* to the group — the group already carries the -37.5px offset. Global
+   x of the rear cap is therefore -37.5 - 107.5 = -145, the rear of the tube. */
+
+/* Rear cap — faces -X, so it only comes into view at the far pan extreme. */
+.body__cap-rear {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  transform: translate3d(-107.5px, 0, 0) rotateY(-90deg);
+  background:
+    radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.06), transparent 60%),
+    var(--shell-deep);
+  box-shadow: inset 0 0 0 1px var(--shell-edge);
+}
+
+/* Front shoulder the barrel steps out of. */
+.body__cap-front {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  transform: translate3d(107.5px, 0, 0) rotateY(90deg);
+  background:
+    radial-gradient(circle at 36% 30%, rgba(255, 255, 255, 0.09), transparent 55%),
+    radial-gradient(circle at 60% 72%, rgba(0, 0, 0, 0.5), transparent 62%),
+    var(--shell);
+  box-shadow: inset 0 0 0 1px var(--shell-edge);
+}
+
+/* Status LED, on the strip of body top left exposed behind the hood. Sits
+   ~0.2px proud of the r38 tube wall (37.5^2 + 6^2 slightly > 38^2) so it is
+   never swallowed by a face, and on the top rather than the side so it stays
+   well clear of the silhouette at both pan extremes. Opacity-only blink. */
+.body__led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transform: translate3d(-80px, -37.5px, 6px);
+  background: var(--led);
+  box-shadow: 0 0 5px 1px var(--led-glow), 0 0 12px 3px var(--led-glow);
+  animation: cam-led 3.6s steps(1, end) infinite;
+}
+
+@keyframes cam-led {
+  0%, 8%   { opacity: 1; }
+  9%, 100% { opacity: 0.16; }
+}
+
+/* ==========================================================================
+   9. Sun hood — partial tube over the top, r46, 8 faces spanning 35-145deg
+   Wider than the body (r46 vs r38) and pushed forward so it overhangs the
+   lens by ~27px: the one silhouette cue that says "bullet camera" at a
+   glance. The arc is deliberately only ~110deg — a full half-tube swallows
+   the whole body from a three-quarter-above viewpoint and the camera stops
+   reading as a cylinder at all. It starts 40px in from the rear cap too,
+   which is where the shade clamps sit on real hardware.
+   ========================================================================== */
+
+.hood { transform: translate3d(20px, -2px, 0); }
+
+.hood__seg {
+  width: 250px;
+  height: 13.8px;
+  /* A shade darker than the housing — it is a separate moulded part, and the
+     tonal break is what stops it merging into the body silhouette. */
+  background-color: var(--surface-2);
+}
+
+.hood__seg:nth-child(1) { transform: rotateX(35deg) translateZ(46px); --shade: 0.007; }
+.hood__seg:nth-child(2) { transform: rotateX(50.71deg) translateZ(46px); --shade: 0; }
+.hood__seg:nth-child(3) { transform: rotateX(66.43deg) translateZ(46px); --shade: 0.011; }
+.hood__seg:nth-child(4) { transform: rotateX(82.14deg) translateZ(46px); --shade: 0.038; }
+.hood__seg:nth-child(5) { transform: rotateX(97.86deg) translateZ(46px); --shade: 0.08; }
+.hood__seg:nth-child(6) { transform: rotateX(113.57deg) translateZ(46px); --shade: 0.133; }
+.hood__seg:nth-child(7) { transform: rotateX(129.29deg) translateZ(46px); --shade: 0.193; }
+.hood__seg:nth-child(8) { transform: rotateX(145deg) translateZ(46px); --shade: 0.255; }
+
+/* The two open edges of the hood. The outer box-shadow is drawn in the face's
+   own plane, which at 35deg is close to the viewer-facing vertical — so it
+   lands on the body below as a free ambient-occlusion contact shadow. */
+.hood__seg:nth-child(1) {
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.10), 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.hood__seg:nth-child(8) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Adjustment slot moulded into the hood, drawn once per face so it wraps. */
+.hood__seg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 70px;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: 1px 0 0 var(--hairline);
+}
+
+/* Hairline of light on the leading edge of the overhang. */
+.hood__seg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12));
+}
+
+/* ---- hood mouth --------------------------------------------------------
+   A partial tube is open at the front, and with backfaces hidden you look
+   straight through the gap between the barrel (r28) and the hood (r46) to
+   the background — which reads as a translucent crescent beside the lens.
+   Turning backfaces back on is worse (the far side of the arc pops in front
+   of the near side), so instead this closes the mouth with a flat annular
+   sector standing in the hood's front plane:
+
+     mask       -> annulus, inner radius 28/46 = 61% of the box
+     clip-path  -> the 35-145deg sector, drawn as a 5-point fan from the
+                   centre through the arc (46,46 is the box centre; the two
+                   arc ends land at x = 46 -/+ 46*cos(35deg) = 8.3 / 83.7)
+
+   It is flat rather than curved, but at these angles nobody can tell, and it
+   gives the shade a readable dark interior and a lit leading edge. */
+/* Brand mark on the camera body. Co-planar with a real body facet — the body
+   is faceted every 20deg, and a mark at any angle between two of them would
+   have its flat plane intersect both, with the crease cutting across it.
+   20deg sits just below the hood's lower rim (35deg), so the mark stays on
+   exposed housing rather than disappearing under the shade. */
+.body__logo {
+  width: 150px;
+  height: 11px;
+  transform: rotateX(20deg) translateZ(38.6px) translateX(-22px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.22);
+  backface-visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.body__logo svg {
+  width: 9px;
+  height: 9px;
+  flex: none;
+}
+
+[data-theme="light"] .body__logo { color: rgba(0, 0, 0, 0.26); }
+
+.hood__mouth {
+  /* The hood's front wall: the ring between the barrel (r28) and the hood
+     (r46). Built from a border rather than a masked disc — box-sizing means
+     a 18px border on a 92px circle leaves exactly a 56px hole, which IS the
+     annulus, with no mask to go wrong.
+     backface-visibility matters: without it this plane is also drawn when
+     seen from inside the hood, where the fan clip has nothing to hide it and
+     it reads as a pale wedge jutting out of the lens. */
+  width: 92px;
+  height: 92px;
+  box-sizing: border-box;
+  border: 18px solid var(--shell-deep);
+  border-radius: 50%;
+  background: none;
+  backface-visibility: hidden;
+  /* Local to `.hood`, which already carries the +20/-2 offset: global x 145. */
+  transform: translate3d(125px, 0, 0) rotateY(90deg);
+  clip-path: polygon(46px 46px, 8.3px 19.6px, 25px 3px, 46px 0, 67px 3px, 83.7px 19.6px);
+}
+
+
+/* ==========================================================================
+   10. Lens barrel — 16-sided tube, r28, 48 long, axis X
+   ========================================================================== */
+
+.barrel { transform: translate3d(94px, 0, 0); }
+
+.barrel__seg { width: 48px; height: 12.24px; --sheen: none; }
+.barrel__seg:nth-child(1) { transform: rotateX(0deg) translateZ(28px); --shade: 0.078; }
+.barrel__seg:nth-child(2) { transform: rotateX(22.5deg) translateZ(28px); --shade: 0.024; }
+.barrel__seg:nth-child(3) { transform: rotateX(45deg) translateZ(28px); --shade: 0.001; }
+.barrel__seg:nth-child(4) { transform: rotateX(67.5deg) translateZ(28px); --shade: 0.013; }
+.barrel__seg:nth-child(5) { transform: rotateX(90deg) translateZ(28px); --shade: 0.058; }
+.barrel__seg:nth-child(6) { transform: rotateX(112.5deg) translateZ(28px); --shade: 0.129; }
+.barrel__seg:nth-child(7) { transform: rotateX(135deg) translateZ(28px); --shade: 0.215; }
+.barrel__seg:nth-child(8) { transform: rotateX(157.5deg) translateZ(28px); --shade: 0.304; }
+.barrel__seg:nth-child(9) { transform: rotateX(180deg) translateZ(28px); --shade: 0.382; }
+.barrel__seg:nth-child(10) { transform: rotateX(202.5deg) translateZ(28px); --shade: 0.436; }
+.barrel__seg:nth-child(11) { transform: rotateX(225deg) translateZ(28px); --shade: 0.459; }
+.barrel__seg:nth-child(12) { transform: rotateX(247.5deg) translateZ(28px); --shade: 0.447; }
+.barrel__seg:nth-child(13) { transform: rotateX(270deg) translateZ(28px); --shade: 0.403; }
+.barrel__seg:nth-child(14) { transform: rotateX(292.5deg) translateZ(28px); --shade: 0.331; }
+.barrel__seg:nth-child(15) { transform: rotateX(315deg) translateZ(28px); --shade: 0.245; }
+.barrel__seg:nth-child(16) { transform: rotateX(337.5deg) translateZ(28px); --shade: 0.156; }
+
+/* Knurled focus collar: the same band on every face, so it reads as a
+   machined ring right around the barrel. */
+.barrel__seg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 12px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.42) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+/* ==========================================================================
+   11. Lens assembly
+   A stack of coaxial discs, each pushed 0.5-1px further along +X than the
+   last. The gaps are invisible at this scale but they give the compositor an
+   unambiguous depth order, which is what stops the classic CSS-3D z-fighting
+   flicker between coplanar elements.
+   ========================================================================== */
+
+/* IR illuminator ring — the housing the emitters sit in. Matches the barrel
+   diameter exactly so no sliver of tube interior shows at the mouth. */
+.lens__ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  transform: translate3d(118.6px, 0, 0) rotateY(90deg);
+  background:
+    radial-gradient(circle at 36% 30%, rgba(255, 255, 255, 0.07), transparent 55%),
+    var(--shell-deep);
+  box-shadow:
+    inset 0 0 0 1px var(--shell-edge),
+    inset 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+/* 8 emitters on a 24px radius — plain 2D children of the (flat) ring. The
+   radius has to clear the 40px glass (r20) and stay inside the 56px ring. */
+.ir__dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, var(--accent-hover), var(--brand-800) 70%);
+  box-shadow: 0 0 4px var(--accent-glow), inset 0 0 2px rgba(0, 0, 0, 0.6);
+}
+
+.ir__dot:nth-child(1) { left: 25.5px; top: 1.5px; }
+.ir__dot:nth-child(2) { left: 42.47px; top: 8.53px; }
+.ir__dot:nth-child(3) { left: 49.5px; top: 25.5px; }
+.ir__dot:nth-child(4) { left: 42.47px; top: 42.47px; }
+.ir__dot:nth-child(5) { left: 25.5px; top: 49.5px; }
+.ir__dot:nth-child(6) { left: 8.53px; top: 42.47px; }
+.ir__dot:nth-child(7) { left: 1.5px; top: 25.5px; }
+.ir__dot:nth-child(8) { left: 8.53px; top: 8.53px; }
+
+/* The glass. Dark, cold, deeper at the centre — the inset shadow does the
+   recession a real dome of glass would. */
+.lens__glass {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transform: translate3d(120.4px, 0, 0) rotateY(90deg);
+  background: radial-gradient(circle at 50% 50%, var(--glass-0) 0%, var(--glass-1) 52%, var(--glass-2) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 3px 10px rgba(0, 0, 0, 0.9),
+    0 0 10px var(--accent-glow);
+}
+
+/* Chromatic coating — a conic sweep masked down to a thin annulus. */
+.lens__chroma {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transform: translate3d(120.9px, 0, 0) rotateY(90deg);
+  background: conic-gradient(
+    from 190deg,
+    transparent 0deg,
+    var(--accent-ring) 60deg,
+    rgba(90, 150, 255, 0.42) 130deg,
+    transparent 210deg,
+    transparent 360deg
+  );
+  -webkit-mask-image: radial-gradient(circle, transparent 62%, #000 70%, #000 100%);
+  mask-image: radial-gradient(circle, transparent 62%, #000 70%, #000 100%);
+  opacity: 0.85;
+}
+
+/* Iris — the dark aperture well at the centre. */
+.lens__iris {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  transform: translate3d(121.4px, 0, 0) rotateY(90deg);
+  background: radial-gradient(circle at 50% 50%, #000 30%, var(--glass-1) 100%);
+  box-shadow:
+    inset 0 0 6px rgba(0, 0, 0, 1),
+    0 0 0 1px rgba(0, 176, 116, 0.22);
+}
+
+/* Specular highlight. Slides across the glass in step with the pan, which is
+   the cheapest possible read of "this surface is curved and reflective".
+   Two nested translates: the first places the disc on the lens axis, the
+   rotateY turns it to face +X, the second slides it *within* that face. */
+.lens__spec {
+  width: 15px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate3d(122px, 0, 0) rotateY(90deg) translate3d(6px, -8px, 0);
+  background: radial-gradient(
+    ellipse at 42% 38%,
+    rgba(255, 255, 255, 0.92),
+    rgba(255, 255, 255, 0.28) 46%,
+    transparent 72%
+  );
+  animation: cam-spec 8.4s cubic-bezier(0.62, 0.02, 0.34, 1) infinite;
+  will-change: transform;
+}
+
+/* Same percentages as cam-pan, opposite direction: the reflection of a fixed
+   light travels backwards across a rotating convex surface. */
+@keyframes cam-spec {
+  0%,   7%   { transform: translate3d(122px, 0, 0) rotateY(90deg) translate3d(6px, -8px, 0); }
+  43%,  57%  { transform: translate3d(122px, 0, 0) rotateY(90deg) translate3d(-8px, -6px, 0); }
+  93%,  100% { transform: translate3d(122px, 0, 0) rotateY(90deg) translate3d(6px, -8px, 0); }
+}
+
+/* Tally LED on the bezel, just below the lens mouth. */
+.lens__led {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transform: translate3d(119px, 33px, 0) rotateY(90deg);
+  background: var(--led);
+  box-shadow: 0 0 5px 1px var(--led-glow);
+}
+
+/* ==========================================================================
+   13. Responsive
+   Only `--rig-scale` changes; no part dimension is ever redeclared. The stage
+   height derives from the same variable so the panel shrinks with the rig.
+   Each step keeps the rig at roughly 78% of the column width; at 375px that
+   is 640 * 0.46 = 294px inside a ~335px column. The stage clips anyway
+   (`overflow: hidden`), so a mis-set scale can never cause page overflow.
+
+   Media queries rather than a clamp() because `scale()` needs a *unitless*
+   number and CSS has no way to derive one from a viewport-relative length —
+   `calc(<length> / <length>)` is not computable in any shipping engine.
+   ========================================================================== */
+
+/* Each step moves the rig, so each step also needs its own pivot. The numbers
+   are measured, not guessed: the mean screen position of .lens__glass across a
+   full sweep at that width. */
+
+@media (max-width: 1280px) {
+  .hero__rig { --rig-scale: 0.74; --rig-x: -4%; }
+  .hero--lab { --pivot-x: 231px; --pivot-y: 156px; }
+}
+
+@media (max-width: 1024px) {
+  .hero__rig { --rig-scale: 0.62; --rig-x: -5%; }
+  .hero--lab { min-height: 600px; --pivot-x: 183px; --pivot-y: 131px; }
+}
+
+@media (max-width: 860px) {
+  .hero__rig { --rig-scale: 0.52; --rig-x: -7%; --rig-y: 0; }
+  .hero--lab { min-height: 560px; --pivot-x: 138px; --pivot-y: 105px; }
+}
+
+/* Below this the rig would sit on top of the copy at any useful size, and a
+   cone sweeping a 2-line headline reads as strobing rather than scanning.
+   Drop the whole effect and show the plain, fully-legible hero instead —
+   a simpler composition beats a cramped one. */
+@media (max-width: 720px) {
+  .hero--lab {
+    animation: none;
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  .hero__rig,
+  .hero__beam { display: none; }
+
+  .hero--lab .hero__title { color: var(--display); }
+  .hero--lab .hero__lead  { color: var(--muted); }
+  .hero--lab .hero__note  { color: var(--faint); }
+  .hero--lab [data-lit]::after { content: none; }
+}
+
+/* ==========================================================================
+   14. Reduced motion — park the head facing forward, kill every animation
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Nothing sweeps, and the copy must not be left dimmed by a cone that is
+     never going to arrive. */
+  .hero--lab {
+    animation: none;
+    --sweep: 24deg;
+    --yaw: 0deg;
+  }
+
+  .hero--lab .hero__title { color: var(--display); }
+  .hero--lab .hero__lead  { color: var(--muted); }
+  .hero--lab .hero__note  { color: var(--faint); }
+  .hero--lab [data-lit]::after { content: none; }
+
+  .hero__beam {
+    animation: none;
+    transform: rotate(24deg);
+    opacity: 0.5;
+    will-change: auto;
+  }
+
+  .cam__yaw {
+    animation: none;
+    transform: rotateY(0deg);
+    will-change: auto;
+  }
+
+  .lens__spec {
+    animation: none;
+    transform: translate3d(122px, 0, 0) rotateY(90deg) translate3d(-2px, -8px, 0);
+    will-change: auto;
+  }
+
+  .body__led {
+    animation: none;
+    opacity: 1;
+  }
+}
