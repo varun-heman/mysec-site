@@ -22,9 +22,13 @@
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/layout.css">
 <link rel="stylesheet" href="assets/css/components.css">
+<!-- Hero camera. Loaded last so it can override components.css. -->
+<link rel="stylesheet" href="assets/css/lab.css">
 
 <script src="assets/js/theme-init.js"></script>
 <script type="module" src="assets/js/main.js"></script>
+<!-- Drives the hero camera, its light cone and the pointer interaction. -->
+<script defer src="assets/js/hero-camera.js"></script>
 </head>
 
 <body>
@@ -84,8 +88,179 @@
 
   <!-- ==================================================================
        Hero
+       The camera is part of the composition rather than a figure below it.
+       Its viewing angle is a real light cone that sweeps across the copy and
+       lifts the headline as it passes. Geometry and timing: lab.css §15-17.
        ================================================================== -->
-  <section class="hero section--dotted section--seam">
+  <section class="hero hero--lab section--dotted section--seam">
+
+    <!-- Rig: mounted upper-left, angled down toward the copy. Decorative,
+         exposed to AT as a single labelled node. -->
+    <div class="hero__rig">
+        <div class="cam" role="img"
+             aria-label="Illustration of a wall-mounted bullet CCTV camera slowly panning from left to right.">
+          <div class="cam__scene">
+
+            <!-- ---- implied mounting surface (fixed) ---------------- -->
+            <div class="cam-g wall">
+              <i class="cam-f wall__panel"></i>
+              <i class="cam-f wall__shadow"></i>
+              <i class="cam-f wall__cable"></i>
+            </div>
+
+            <!-- ---- wall plate: 14-face collar + disc (fixed) ------- -->
+            <div class="cam-g plate">
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f cam-shell plate__seg"></i>
+              <i class="cam-f plate__face">
+                <i class="plate__screw"></i>
+                <i class="plate__screw"></i>
+                <i class="plate__screw"></i>
+                <i class="plate__screw"></i>
+              </i>
+            </div>
+
+            <!-- ---- mount arm: 12-face tube (fixed) ----------------- -->
+            <div class="cam-g arm">
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+              <i class="cam-f cam-shell arm__seg"></i>
+            </div>
+
+            <!-- ==========================================================
+                 THE HEAD — everything below pans together.
+                 transform-origin is pinned to the mount post in lab.css.
+                 ========================================================== -->
+            <div class="cam-g cam__yaw">
+
+              <!-- ---- pan post / knuckle: 12-face vertical tube ----- -->
+              <div class="cam-g post">
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+                <i class="cam-f cam-shell post__seg"></i>
+              </div>
+              <i class="cam-f post__bolt"></i>
+
+              <!-- ---- body: 18-face tube + caps + status LED -------- -->
+              <div class="cam-g body">
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+                <i class="cam-f cam-shell body__seg"></i>
+              <i class="cam-f body__logo">
+                <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-logo"></use></svg>
+                <span>mySecurity</span>
+              </i>
+              <i class="cam-f body__cap-rear"></i>
+                <i class="cam-f body__cap-front"></i>
+                <i class="cam-f body__led"></i>
+              </div>
+
+              <!-- ---- sun hood: 8-face partial tube over the top ---- -->
+              <div class="cam-g hood">
+                <i class="cam-f cam-shell hood__seg"></i>
+                <i class="cam-f cam-shell hood__seg"></i>
+                <i class="cam-f cam-shell hood__seg"></i>
+                <i class="cam-f cam-shell hood__seg"></i>
+                <i class="cam-f cam-shell hood__seg"></i>
+                <i class="cam-f cam-shell hood__seg"></i>
+                <i class="cam-f cam-shell hood__seg"></i>
+                <i class="cam-f cam-shell hood__seg"></i>
+                <i class="cam-f hood__mouth"></i>
+              </div>
+
+              <!-- ---- lens barrel: 16-face tube --------------------- -->
+              <div class="cam-g barrel">
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+                <i class="cam-f cam-shell barrel__seg"></i>
+              </div>
+
+              <!-- ---- lens stack: coaxial discs, +X order = depth --- -->
+              <div class="cam-g lens">
+                <i class="cam-f lens__ring">
+                  <i class="ir__dot"></i>
+                  <i class="ir__dot"></i>
+                  <i class="ir__dot"></i>
+                  <i class="ir__dot"></i>
+                  <i class="ir__dot"></i>
+                  <i class="ir__dot"></i>
+                  <i class="ir__dot"></i>
+                  <i class="ir__dot"></i>
+                </i>
+                <i class="cam-f lens__glass"></i>
+                <i class="cam-f lens__chroma"></i>
+                <i class="cam-f lens__iris"></i>
+                <i class="cam-f lens__spec"></i>
+                <i class="cam-f lens__led"></i>
+              </div>
+
+              <!-- ---- detection cone: two crossed wedges ------------ -->
+              <div class="cam-g cone">
+              </div>
+
+            </div><!-- /.cam__yaw -->
+          </div><!-- /.cam__scene -->
+        </div><!-- /.cam -->
+    </div>
+
     <div class="wrap">
       <div class="hero__inner">
         <span class="badge badge--accent">
@@ -93,24 +268,44 @@
           Now monitoring 1,200+ sites
         </span>
 
-        <h1 class="hero__title">One AI watching every camera, gate and door.</h1>
+        <h1 class="hero__title" data-lit>One AI watching every camera, gate and door.</h1>
 
-        <p class="hero__lead">
+        <p class="hero__lead" data-lit>
           mySecurity turns the equipment you already own into a single security
           system that thinks. It sees what matters, decides what to do, and acts
           in seconds — across homes, campuses, warehouses and offices.
         </p>
 
         <div class="hero__actions">
-          <a class="btn btn--primary btn--lg" href="contact.html#demo">
+          <a class="btn btn--primary btn--lg" href="contact.html#demo" data-lit-glow>
             Book a demo
             <svg aria-hidden="true"><use href="assets/img/icons.svg#icon-arrow-right"></use></svg>
           </a>
-          <a class="btn btn--secondary btn--lg" href="platform.html">See how it works</a>
+          <a class="btn btn--secondary btn--lg" href="platform.html" data-lit-glow>See how it works</a>
         </div>
 
-        <p class="hero__note">Works with existing CCTV · No rip-and-replace · Live in days</p>
+        <p class="hero__note" data-lit>Works with existing CCTV · No rip-and-replace · Live in days</p>
       </div>
+    </div>
+
+    <!-- Fires when the head re-acquires a moving subject. Pinned to the lens
+         via --pivot-x/y, so it tracks the front of the camera as it pans.
+         The outer span positions, the inner one animates. -->
+    <span class="cam-alert" data-alert aria-hidden="true"><i>!</i></span>
+
+    <!-- What the camera is looking at, annotated. Decorative and inert:
+         hidden from AT, never intercepts a click. -->
+    <div class="tracker" data-tracker data-state="loiter" aria-hidden="true">
+      <span class="tracker__tag tracker__tag--id">Friendly User</span>
+      <span class="tracker__box"><i></i><i></i><i></i><i></i></span>
+      <span class="tracker__tag tracker__tag--act" data-tracker-label>Loitering</span>
+    </div>
+
+    <!-- The visible viewing angle. Painted above the copy and blended, so the
+         light reads as passing over the words rather than under them. -->
+    <div class="hero__beam" aria-hidden="true">
+      <i class="hero__beam-spill"></i>
+      <i class="hero__beam-core"></i>
     </div>
   </section>
 
